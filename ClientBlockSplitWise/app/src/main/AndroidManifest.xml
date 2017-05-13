@@ -45,7 +45,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.blocksplitwise.clientblocksplitwise.MainActivity" />
         </activity>
-        <activity android:name=".Group"></activity>
+        <activity
+            android:name=".Group"
+            android:label="@string/title_activity_group"
+            android:parentActivityName=".Groups"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.blocksplitwise.clientblocksplitwise.Groups" />
+        </activity>
+        <activity
+            android:name=".activity_group"
+            android:label="@string/title_activity_group"
+            android:parentActivityName=".Groups"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.blocksplitwise.clientblocksplitwise.Groups" />
+        </activity>
     </application>
 
 </manifest>
