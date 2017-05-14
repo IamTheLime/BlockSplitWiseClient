@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -51,6 +52,15 @@ public class Groups extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
         final ImageButton buttonArrow;
+        //Creating the action for the Floating Button
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addGroupButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
         //Creates popup button whenever the arrow is pressed, Still A WIP
         buttonArrow = (ImageButton) findViewById(R.id.imageButton);
         buttonArrow.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +77,9 @@ public class Groups extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(llm);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
         // This is Just for Test
         initializeData();
         RVAdapter adapter = new RVAdapter(groups);
@@ -76,30 +89,16 @@ public class Groups extends AppCompatActivity {
     }
 
     private void initializeData(){
+        //Query the server for the group information
+        //Initialize the List With The group details
         groups = new ArrayList<>();
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Emma Wilson", "23 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lavery Maiss", "25 years old", R.drawable.ic_arrow_drop_down_black_24dp));
-        groups.add(new GroupDetails("Lillie Watts", "35 years old", R.drawable.ic_arrow_drop_down_black_24dp));
+        groups.add(new GroupDetails("General Expenses1", "This is just a group", R.mipmap.ic_money));
+        groups.add(new GroupDetails("General Expenses2", "This is just a group", R.mipmap.ic_money));
+        groups.add(new GroupDetails("House Expenses1", "This is another group", R.mipmap.ic_house));
+        groups.add(new GroupDetails("House Expenses2", "This is another group", R.mipmap.ic_house));
+        groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));
+        groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));
+
     }
 
     @Override
@@ -155,10 +154,10 @@ public class Groups extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(GroupViewHolder personViewHolder, int i) {
-            personViewHolder.groupName.setText(groups.get(i).getGroupName());
-            personViewHolder.groupInfo.setText(groups.get(i).getGroupInfo());
-            personViewHolder.groupPhoto.setImageResource(groups.get(i).getPhotoId());
+        public void onBindViewHolder(GroupViewHolder groupViewHolder, int i) {
+            groupViewHolder.groupName.setText(groups.get(i).getGroupName());
+            groupViewHolder.groupInfo.setText(groups.get(i).getGroupInfo());
+            groupViewHolder.groupPhoto.setImageResource(groups.get(i).getPhotoId());
         }
 
         @Override
