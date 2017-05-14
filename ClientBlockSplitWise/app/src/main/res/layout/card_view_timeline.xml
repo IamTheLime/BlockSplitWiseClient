@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:timeline="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,9 +15,10 @@
             android:id="@+id/timeline"
             android:layout_width="?android:listPreferredItemHeight"
             android:layout_height="?android:listPreferredItemHeight"
-            app:timeline_indicatorSize="20dp"
+            app:timeline_indicatorSize="7dp"
             app:timeline_internalPadding="40dp"
-            app:timeline_lineStyle="linear"
+            app:timeline_lineStyle="dashed"
+            app:timeline_lineWidth="2dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true" />
 

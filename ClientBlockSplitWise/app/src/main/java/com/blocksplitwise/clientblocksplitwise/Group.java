@@ -63,6 +63,10 @@ public class Group extends AppCompatActivity {
         items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
         items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
         items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
         items.add(new Event("LastTest", RoundTimelineView.TYPE_END));
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(new EventsAdapter(LayoutInflater.from(this), items));
