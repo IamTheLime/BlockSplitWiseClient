@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+
 import com.alorma.timeline.RoundTimelineView;
 import com.alorma.timeline.TimelineView;
 
@@ -57,19 +60,23 @@ public class Group extends AppCompatActivity {
         //list.addItemDecoration(itemDecoration);
         list.setLayoutManager(llm);
         ArrayList<Event> items = new ArrayList<>();
-        items.add(new Event("FirstTest", TimelineView.TYPE_START));
-        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste3", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("Teste4", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("LastTest", RoundTimelineView.TYPE_END));
+        items.add(new Event("01-02-2017", TimelineView.TYPE_START));
+        items.add(new Event("02-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("03-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("04-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("05-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("06-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("07-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("08-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("09-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("10-02-2017", RoundTimelineView.TYPE_MIDDLE));
+        items.add(new Event("11-02-2017", RoundTimelineView.TYPE_END));
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(new EventsAdapter(LayoutInflater.from(this), items));
+        ImageView iv = (ImageView) findViewById(R.id.group_logo);
+        iv.setBackgroundResource(R.mipmap.ic_launcher);
+        iv.setElevation(60);
+                //iv.setImageResource(R.mipmap.ic_launcher);
 
     }
 

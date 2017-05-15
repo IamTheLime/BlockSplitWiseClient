@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:selectableItemBackground"
+        app:cardCornerRadius="0dp"
         android:focusable="true"
         android:id="@+id/cv"
         >
@@ -17,6 +18,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBG"
             android:padding="2dp">
 
             <ImageView
@@ -30,7 +32,7 @@
 
             <TextView
                 android:id="@+id/group_name"
-                android:textColor="#000000"
+                android:textColor="@color/primaryDark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -40,6 +42,7 @@
 
             <TextView
                 android:id="@+id/group_info"
+                android:textColor="@color/primaryDark"
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -24,7 +24,7 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolderItem> {
 
     @Override
     public ViewHolderItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolderItem(inflater.inflate(R.layout.recycler_view_timeline, parent, false));
+        return new ViewHolderItem(inflater.inflate(R.layout.card_view_timeline, parent, false));
     }
 
     @Override
