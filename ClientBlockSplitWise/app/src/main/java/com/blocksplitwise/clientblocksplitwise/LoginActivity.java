@@ -23,6 +23,7 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.JsonReader;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -199,6 +200,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             ///////////THIS IS ONLY A TEST///////////////////////
             new Authorize().execute(email,password);
+            Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
+            goToMain.putExtra("Login",email);
+            startActivity(goToMain);
+            finish();
 
         }
     }
@@ -324,7 +329,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 myConnection.setRequestMethod("GET");
                 myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString((params[0]+":"+params[1]).getBytes(),Base64.DEFAULT));
 
-                //myConnection.connect();
                 if (myConnection.getResponseCode() == 200) {
                     //showProgress(true);
                     Authenticator.setDefault(new Authenticator() {
@@ -340,8 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return false;
                 }
 
-            }catch(Exception e){e.printStackTrace();}
-            return false;
+            }catch(Exception e){e.printStackTrace();return false;}
         }
 
         @Override
@@ -358,8 +361,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
             }
             else{
+
                 return;
-                //Toast.makeText(getIntent(),"PEIXE",Toast.LENGTH_LONG);
             }
         }
     }

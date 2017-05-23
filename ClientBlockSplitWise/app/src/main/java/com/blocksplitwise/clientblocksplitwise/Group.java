@@ -41,6 +41,13 @@ public class Group extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /////////////////////////////FONT TOP///////////////////////////////////////
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
+        tv.setTypeface(face);
+        tv.setText("GROUP");
+        tv.setTextSize(30);
+        ////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);

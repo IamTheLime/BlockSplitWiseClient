@@ -80,7 +80,7 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolderItem> {
             test1.setTypeface(face);
             test1.setTextSize(18);
             test2.setTypeface(face2);
-            test2.setTextSize(24);
+            test2.setTextSize(20);
 
         }
 

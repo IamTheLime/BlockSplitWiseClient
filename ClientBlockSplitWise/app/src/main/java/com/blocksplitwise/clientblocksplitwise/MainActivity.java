@@ -32,11 +32,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /////////////////////////////FONT TOP///////////////////////////////////////
         TextView tv = (TextView) findViewById(R.id.toolbar_title);
         Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
         tv.setTypeface(face);
         tv.setText("BLOCKSPLITWISE");
         tv.setTextSize(30);
+        ////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

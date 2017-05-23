@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,6 +36,10 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +58,13 @@ public class Groups extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /////////////////////////////FONT TOP///////////////////////////////////////
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
+        tv.setTypeface(face);
+        tv.setText("GROUPS");
+        tv.setTextSize(30);
+        ////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0, 50, 0, 0);
@@ -109,6 +122,46 @@ public class Groups extends AppCompatActivity {
         groups.add(new GroupDetails("House Expenses2", "This is another group", R.mipmap.ic_house));
         groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));
         groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));
+
+    }
+
+    private class loadData extends AsyncTask<String,Void,Boolean> {
+        private String email;
+        private String password;
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            URL myEndpoint = null;
+            email = params[0];password=params[1];
+            try {
+                myEndpoint = new URL("http://10.0.2.2:9000/users/rui");}catch(Exception e) {e.printStackTrace();}
+            // Create connection
+            HttpURLConnection myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();}catch (Exception e){e.printStackTrace();}
+
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("GET");
+                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString((params[0]+":"+params[1]).getBytes(),Base64.DEFAULT));
+
+                if (myConnection.getResponseCode() == 200) {
+                    //showProgress(true);
+                    Authenticator.setDefault(new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(params[0],params[1].toCharArray());
+                        }
+                    });
+                    return true;
+
+                }
+                else{
+                    return false;
+                }
+
+            }catch(Exception e){e.printStackTrace();return false;}
+        }
 
     }
 

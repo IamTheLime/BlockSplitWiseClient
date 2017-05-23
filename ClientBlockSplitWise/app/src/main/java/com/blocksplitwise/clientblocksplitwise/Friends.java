@@ -2,6 +2,7 @@ package com.blocksplitwise.clientblocksplitwise;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class Friends extends AppCompatActivity {
 
@@ -28,6 +30,13 @@ public class Friends extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /////////////////////////////FONT TOP///////////////////////////////////////
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
+        tv.setTypeface(face);
+        tv.setText("FRIENDS");
+        tv.setTextSize(30);
+        ////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
