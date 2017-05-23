@@ -20,6 +20,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.JsonReader;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,9 +33,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -193,6 +201,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             // mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
+            ///////////THIS IS ONLY A TEST///////////////////////
+
+            // Create URL
+            URL myEndpoint = null;
+            try {
+                myEndpoint = new URL("http://localhost/3000/users/rui");}catch(Exception e) {e.printStackTrace();}
+             // Create connection
+            HttpsURLConnection myConnection = null;
+            try{
+            myConnection =
+                    (HttpsURLConnection) myEndpoint.openConnection();}catch (Exception e){e.printStackTrace();}
+
+            // Enable writing
+            try{
+            myConnection.setRequestMethod("GET");
+            myConnection.setRequestProperty("Autorization","Basic"+ Base64.encodeToString("rui:pass".getBytes(),Base64.DEFAULT));
+                //myConnection.connect();
+                if (myConnection.getResponseCode() == 200) {
+                InputStreamReader responseBodyReader =
+                        new InputStreamReader(myConnection.getInputStream(), "UTF-8");
+                JsonReader jsonReader = new JsonReader(responseBodyReader);
+                    Toast.makeText(this,jsonReader.nextName(),Toast.LENGTH_LONG);
+                }
+                else{
+                    Toast.makeText(this,"Falhou",Toast.LENGTH_LONG);}
+            }catch(Exception e){e.printStackTrace();}
+
+            /////////////////////////////////////////////////////
             Intent goToMain = new Intent(this,MainActivity.class);
             goToMain.putExtra("Login",email);
             startActivity(goToMain);
