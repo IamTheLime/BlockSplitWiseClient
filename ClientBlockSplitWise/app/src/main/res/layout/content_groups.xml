@@ -15,6 +15,7 @@
          android:background="@color/accent"
          android:layout_width="match_parent"
          android:layout_height="100dp"
+         android:layout_alignParentTop="true"
          android:layout_alignParentStart="true">
 
          <RelativeLayout
@@ -48,22 +49,30 @@
                     android:text="you are all settled up"
                      />
          </RelativeLayout>
-         <ImageView
+         <com.mikhaellopez.circularimageview.CircularImageView
              android:id="@+id/imageView2"
+             android:layout_marginBottom="4dp"
+             android:layout_marginTop="4dp"
              android:layout_centerVertical="true"
              android:layout_centerHorizontal="true"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentStart="true"
              android:layout_toStartOf="@id/llayoutaux"
-             app:srcCompat="@mipmap/ic_launcher_round" />
+             android:src="@mipmap/ic_launcher_round"
+             app:civ_border="true"
+             app:civ_border_color="@color/primaryDark"
+             app:civ_border_width="4dp"
+             app:civ_shadow="true"
+             app:civ_shadow_color="@color/primaryDark"
+             app:civ_shadow_radius="10"/>
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:elevation="5dp"
-            android:background="@color/accent"
+            android:background="@android:color/transparent"
             android:foreground="?android:selectableItemBackground"
             android:clickable="true"
             android:layout_alignParentEnd="true"

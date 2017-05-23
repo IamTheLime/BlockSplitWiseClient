@@ -22,21 +22,14 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBG"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
             android:elevation="20dp"
+            android:bottomRightRadius="10dp"
+            android:bottomLeftRadius="10dp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
             android:text="SETTLE UP"
-            />
-        <ImageView
-            android:stateListAnimator="@null"
-            android:id="@+id/group_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:elevation="100dp"
-
             />
         <Button
             android:stateListAnimator="@null"
@@ -45,12 +38,38 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBG"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
             android:elevation="20dp"
+            android:bottomRightRadius="10dp"
+            android:bottomLeftRadius="10dp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
             android:text="BALANCES"
             />
+
+        <RelativeLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            >
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/group_logo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_launcher_round"
+                app:civ_border="true"
+                app:civ_border_color="@color/primaryDark"
+                app:civ_border_width="4dp"
+                app:civ_shadow="true"
+                app:civ_shadow_color="@color/primaryDark"
+                app:civ_shadow_radius="10" />
+        </RelativeLayout>
+
     </RelativeLayout>
     <include layout="@layout/recycler_view"
         android:layout_width="match_parent"

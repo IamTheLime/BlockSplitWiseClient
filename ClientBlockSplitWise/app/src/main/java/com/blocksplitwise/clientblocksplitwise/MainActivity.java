@@ -1,6 +1,7 @@
 package com.blocksplitwise.clientblocksplitwise;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +32,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
+        tv.setTypeface(face);
+        tv.setText("BLOCKSPLITWISE");
+        tv.setTextSize(30);
         setSupportActionBar(toolbar);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

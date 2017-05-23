@@ -1,5 +1,7 @@
 package com.blocksplitwise.clientblocksplitwise;
 
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,22 +17,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alorma.timeline.RoundTimelineView;
 import com.alorma.timeline.TimelineView;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 
 import pojo.GroupDetails;
 
 public class Group extends AppCompatActivity {
-    private RecyclerView recyclerView;
+    private RecyclerView list;
+    private ArrayList<Event> items;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -52,14 +59,37 @@ public class Group extends AppCompatActivity {
 
         RoundTimelineView timelineView = (RoundTimelineView) findViewById(R.id.timeline);
         //Glide.with(this).load(R.drawable.avatar).into(timelineView);
-        RecyclerView list = (RecyclerView) findViewById(R.id.rv);
+        list = (RecyclerView) findViewById(R.id.rv);
         list.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
        // RecyclerView.ItemDecoration itemDecoration = new
          //       DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         //list.addItemDecoration(itemDecoration);
         list.setLayoutManager(llm);
-        ArrayList<Event> items = new ArrayList<>();
+        fillItems();
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), items, new EventClickHandler(),getAssets()));
+        CircularImageView iv = (CircularImageView) findViewById(R.id.group_logo);
+        iv.setImageResource(R.mipmap.ic_launcher);
+        iv.setElevation(60);
+                //iv.setImageResource(R.mipmap.ic_launcher);
+
+        //Extras
+        initfonts();
+    }
+
+
+    private void initfonts(){
+        Typeface face = Typeface.createFromAsset(getAssets(),
+                "font/pragmata.ttf");
+        ((Button)findViewById(R.id.balance)).setTypeface(face);
+        ((Button)findViewById(R.id.balance)).setTextSize(16);
+        ((Button)findViewById(R.id.settled)).setTypeface(face);
+        ((Button)findViewById(R.id.settled)).setTextSize(16);
+    }
+
+    private void fillItems(){
+        items = new ArrayList<>();
         items.add(new Event("01-02-2017", TimelineView.TYPE_START));
         items.add(new Event("02-02-2017", RoundTimelineView.TYPE_MIDDLE));
         items.add(new Event("03-02-2017", RoundTimelineView.TYPE_MIDDLE));
@@ -71,15 +101,18 @@ public class Group extends AppCompatActivity {
         items.add(new Event("09-02-2017", RoundTimelineView.TYPE_MIDDLE));
         items.add(new Event("10-02-2017", RoundTimelineView.TYPE_MIDDLE));
         items.add(new Event("11-02-2017", RoundTimelineView.TYPE_END));
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), items));
-        ImageView iv = (ImageView) findViewById(R.id.group_logo);
-        iv.setBackgroundResource(R.mipmap.ic_launcher);
-        iv.setElevation(60);
-                //iv.setImageResource(R.mipmap.ic_launcher);
-
     }
 
-
+    protected class EventClickHandler implements RecyclerView.OnClickListener{
+        @Override
+        public void onClick(final View view) {
+            int itemPosition = list.getChildLayoutPosition(view);
+            Event event = items.get(itemPosition);
+            Toast.makeText(Group.this, event.toString(), Toast.LENGTH_SHORT).show();
+           // Intent goToGroupDetails = new Intent(Group.this,Group.class);
+            //goToGroupDetails.putExtra("GroupValue",item);
+           // startActivityForResult(goToGroupDetails,0);
+        }
+    }
 
 }
