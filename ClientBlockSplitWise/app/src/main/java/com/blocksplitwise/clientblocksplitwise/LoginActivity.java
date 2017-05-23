@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStreamReader;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,8 +69,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -158,17 +160,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -198,51 +196,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            // mAuthTask = new UserLoginTask(email, password);
-            //mAuthTask.execute((Void) null);
+
             ///////////THIS IS ONLY A TEST///////////////////////
+            new Authorize().execute(email,password);
 
-            // Create URL
-            URL myEndpoint = null;
-            try {
-                myEndpoint = new URL("http://localhost/3000/users/rui");}catch(Exception e) {e.printStackTrace();}
-             // Create connection
-            HttpsURLConnection myConnection = null;
-            try{
-            myConnection =
-                    (HttpsURLConnection) myEndpoint.openConnection();}catch (Exception e){e.printStackTrace();}
-
-            // Enable writing
-            try{
-            myConnection.setRequestMethod("GET");
-            myConnection.setRequestProperty("Autorization","Basic"+ Base64.encodeToString("rui:pass".getBytes(),Base64.DEFAULT));
-                //myConnection.connect();
-                if (myConnection.getResponseCode() == 200) {
-                InputStreamReader responseBodyReader =
-                        new InputStreamReader(myConnection.getInputStream(), "UTF-8");
-                JsonReader jsonReader = new JsonReader(responseBodyReader);
-                    Toast.makeText(this,jsonReader.nextName(),Toast.LENGTH_LONG);
-                }
-                else{
-                    Toast.makeText(this,"Falhou",Toast.LENGTH_LONG);}
-            }catch(Exception e){e.printStackTrace();}
-
-            /////////////////////////////////////////////////////
-            Intent goToMain = new Intent(this,MainActivity.class);
-            goToMain.putExtra("Login",email);
-            startActivity(goToMain);
         }
     }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        //return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 3;
     }
 
     /**
@@ -335,61 +304,65 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
+    private class Authorize extends AsyncTask<String,Void,Boolean>{
+        private String email;
+        private String password;
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
+        protected Boolean doInBackground(final String... params) {
+            URL myEndpoint = null;
+            email = params[0];password=params[1];
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                myEndpoint = new URL("http://10.0.2.2:9000/users/rui");}catch(Exception e) {e.printStackTrace();}
+            // Create connection
+            HttpURLConnection myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();}catch (Exception e){e.printStackTrace();}
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("GET");
+                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString((params[0]+":"+params[1]).getBytes(),Base64.DEFAULT));
+
+                //myConnection.connect();
+                if (myConnection.getResponseCode() == 200) {
+                    //showProgress(true);
+                    Authenticator.setDefault(new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(params[0],params[1].toCharArray());
+                        }
+                    });
+                    return true;
+
                 }
-            }
+                else{
+                    return false;
+                }
 
-            // TODO: register the new account here.
-            return true;
+            }catch(Exception e){e.printStackTrace();}
+            return false;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
 
-            if (success) {
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean==true){
+                Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
+                goToMain.putExtra("Login",email);
+                startActivity(goToMain);
                 finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
             }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+            else{
+                return;
+                //Toast.makeText(getIntent(),"PEIXE",Toast.LENGTH_LONG);
+            }
         }
     }
+
 }
 
