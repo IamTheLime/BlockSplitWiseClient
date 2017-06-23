@@ -38,12 +38,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -103,6 +105,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mEmailRegisterInButton = (Button) findViewById(R.id.email_register_in_button);
+        mEmailRegisterInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
             }
         });
 
@@ -199,11 +209,84 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
 
             ///////////THIS IS ONLY A TEST///////////////////////
-            new Authorize().execute(email,password);
-            Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
-            goToMain.putExtra("Login",email);
-            startActivity(goToMain);
+            Authorize authorizator = new Authorize();
+            authorizator.execute(email,password);
+
+            showProgress(true);
+            try {
+                Thread.sleep(1000);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            showProgress(false);
+            Intent intent = getIntent();
             finish();
+            startActivity(intent);
+            //Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
+            //finish();
+
+        }
+    }
+
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    private void attemptRegister() {
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+
+            ///////////THIS IS ONLY A TEST///////////////////////
+            Registerer registerer = new Registerer();
+            registerer.execute(email,password);
+
+            showProgress(true);
+            try {
+                Thread.sleep(1000);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            showProgress(false);
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            //Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
+            //finish();
 
         }
     }
@@ -308,7 +391,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
+//////////////////////////////////////////AUTHORIZATION MANAGER/////////////////////////////////////
     private class Authorize extends AsyncTask<String,Void,Boolean>{
         private String email;
         private String password;
@@ -317,12 +400,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://10.0.2.2:9000/users/rui");}catch(Exception e) {e.printStackTrace();}
-            // Create connection
-            HttpURLConnection myConnection = null;
+                myEndpoint = new URL("http://192.168.1.29:9000/users/"+params[0]);}
+            catch(Exception e) {
+                    e.printStackTrace();
+                return false;
+                }
+                // Create connection
+                HttpURLConnection myConnection = null;
             try{
                 myConnection =
-                        (HttpURLConnection) myEndpoint.openConnection();}catch (Exception e){e.printStackTrace();}
+                        (HttpURLConnection) myEndpoint.openConnection();}
+            catch (Exception e){
+                e.printStackTrace();
+                return false;}
 
             // Enable writing
             try{
@@ -330,6 +420,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString((params[0]+":"+params[1]).getBytes(),Base64.DEFAULT));
 
                 if (myConnection.getResponseCode() == 200) {
+
                     //showProgress(true);
                     Authenticator.setDefault(new Authenticator() {
                         @Override
@@ -344,7 +435,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return false;
                 }
 
-            }catch(Exception e){e.printStackTrace();return false;}
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
         }
 
         @Override
@@ -361,7 +456,103 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
             }
             else{
+                showProgress(false);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                return;
+            }
+        }
+    }
 
+    /////////////////////////////////////////////REGISTER MANAGER///////////////////////////////////
+    private class Registerer extends AsyncTask<String,Void,Boolean>{
+        private String email;
+        private String password;
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            System.out.print("Im here");
+            URL myEndpoint = null;
+            email = params[0];password=params[1];
+            try {
+                myEndpoint = new URL("http://192.168.1.29:9000/newuser");}
+            catch(Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            // Create connection
+            HttpURLConnection myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();}
+            catch (Exception e){
+                e.printStackTrace();
+                return false;}
+
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("POST");
+                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString(("null:null").getBytes(),Base64.DEFAULT));
+                myConnection.setRequestProperty("Content-Type","application/json");
+                String registerJSON = "{ \"name\": \""+email+"\", \"pw\": \""+password+"\"}";
+                byte[] outputInBytes = registerJSON.getBytes("UTF-8");
+                OutputStream os = myConnection.getOutputStream();
+                os.write(outputInBytes);
+                os.flush();
+                os.close();
+
+                if (myConnection.getResponseCode() == 200) {
+
+                    Authenticator.setDefault(new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(params[0],params[1].toCharArray());
+                        }
+                    });
+                    return true;
+
+                }
+                else if (myConnection.getResponseCode() == 409) {
+                    return false;
+                }
+                else{
+                    return false;
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean==true){
+                Authorize authorizator = new Authorize();
+                authorizator.execute(email,password);
+
+                showProgress(true);
+                try {
+                    Thread.sleep(1000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                showProgress(false);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+            else{
+                showProgress(false);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
                 return;
             }
         }
