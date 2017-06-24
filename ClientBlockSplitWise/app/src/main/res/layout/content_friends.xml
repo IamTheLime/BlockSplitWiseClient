@@ -52,16 +52,14 @@
             android:id="@+id/include"
             layout="@layout/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="343dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.476"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/llayout" />
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
 </RelativeLayout>

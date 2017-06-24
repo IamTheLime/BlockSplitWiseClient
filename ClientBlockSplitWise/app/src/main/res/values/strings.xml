@@ -23,4 +23,11 @@
     <string name="title_activity_groups"></string>
     <string name="title_activity_group"></string>
     <string name="title_activity_group_add"></string>
+
+    <string name="profile">Profile</string>
+    <string name="debt">Debt</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

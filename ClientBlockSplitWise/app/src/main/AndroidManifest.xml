@@ -73,6 +73,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.blocksplitwise.clientblocksplitwise.Groups" />
         </activity>
+
+        <activity
+            android:name=".Friend"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.blocksplitwise.clientblocksplitwise.Friends" />
     </application>
 
 </manifest>
