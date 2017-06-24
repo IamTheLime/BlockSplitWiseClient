@@ -107,7 +107,7 @@ public class Groups extends AppCompatActivity {
 
     private void initfonts(){
         Typeface face = Typeface.createFromAsset(getAssets(),
-                "font/pragmata.ttf");
+                "font/Amethyst.ttf");
         ((TextView)findViewById(R.id.textView2)).setTypeface(face);
         ((TextView)findViewById(R.id.textView3)).setTypeface(face);
     }

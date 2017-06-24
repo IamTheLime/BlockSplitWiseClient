@@ -22,5 +22,5 @@
     <string name="title_activity_friends"></string>
     <string name="title_activity_groups"></string>
     <string name="title_activity_group"></string>
-    <string name="title_activity_group_add">GroupAdd</string>
+    <string name="title_activity_group_add"></string>
 </resources>

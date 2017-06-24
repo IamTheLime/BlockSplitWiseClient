@@ -11,87 +11,171 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:background="#E1C6C4"
         android:id="@+id/relativeLayout">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/editText"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:text="Group Name" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/editText"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:text="GROUP NAME" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Enter a Group Name"
-        android:layout_marginLeft="20dp"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true" />
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ems="20"
+            android:inputType="textPersonName"
+            android:hint="Enter a Group Name"
             android:layout_centerHorizontal="true"
-            android:paddingBottom="20dp"
-            >
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textPrimary"
-            android:background="@color/primaryDark"
-            android:layout_alignParentBottom="true"
-            android:bottomRightRadius="0dp"
-            android:bottomLeftRadius="0dp"
-            android:topLeftRadius="0dp"
-            android:topRightRadius="0dp"
-            android:text="Apartment" />
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textPrimary"
-            android:background="@color/primaryDark"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/button"
-            android:bottomRightRadius="0dp"
-            android:bottomLeftRadius="0dp"
-            android:topLeftRadius="0dp"
-            android:topRightRadius="0dp"
-            android:text="House" />
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textPrimary"
-            android:background="@color/primaryDark"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/button2"
-            android:bottomRightRadius="0dp"
-            android:bottomLeftRadius="0dp"
-            android:topLeftRadius="0dp"
-            android:topRightRadius="0dp"
-            android:text="Trip" />
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textPrimary"
-            android:background="@color/primaryDark"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/button3"
-            android:bottomRightRadius="0dp"
-            android:bottomLeftRadius="0dp"
-            android:topLeftRadius="0dp"
-            android:topRightRadius="0dp"
-            android:text="Other" />
+            android:layout_below="@+id/textView4" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/primaryDark"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    >
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/textPrimary"
+                android:background="@color/primaryDark"
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"
+                android:text="Apartment" />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/textPrimary"
+                android:background="@color/primaryDark"
+                android:layout_toEndOf="@id/button"
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"
+                android:text="House" />
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/textPrimary"
+                android:background="@color/primaryDark"
+                android:layout_toEndOf="@id/button2"
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"
+                android:text="Trip" />
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/textPrimary"
+                android:background="@color/primaryDark"
+                android:layout_toEndOf="@id/button3"
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"
+                android:text="Other" />
+                </RelativeLayout>
+            </RelativeLayout>
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/Relative2"
+            android:background="@color/colorBG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativeLayout">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/addGroupCardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:foreground="?android:selectableItemBackground"
+                        android:clickable="true"
+                        app:cardElevation="0dp"
+                        android:background="@color/colorBG">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorBG">
+                                <ImageView
+                                    android:id="@+id/plusSign"
+                                    android:layout_width="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="10dp"
+                                    android:src="@drawable/ic_control_point_black_24dp"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:text="      ADD A FRIEND"
+                                    android:layout_width="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:textColor="@color/primaryDark"
+                                    android:textSize="20dp"
+                                    android:layout_toEndOf="@id/plusSign"
+                                    android:layout_height="wrap_content" />
+                            </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_below="@id/addGroupCardview"
+                android:gravity="center_vertical"
+                android:text="FRIENDS IN GROUP:"
+                android:textColor="@color/textPrimary"
+                android:background="@color/primaryDark"
+                android:id="@+id/justanAdjustmentText"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Relative3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/Relative2"
+        >
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:bottomRightRadius="0dp"
+            android:bottomLeftRadius="0dp"
+            android:topLeftRadius="0dp"
+            android:topRightRadius="0dp"
+            android:background="@color/accent"
+            android:textColor="@color/textPrimary"
+            android:textSize="20dp"
+            android:text="SUBMIT GROUP"
+            />
+
+        <RelativeLayout
+            android:id="@+id/Relative4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/button5"
+            >
+        <include
+            android:id="@+id/include"
+            layout="@layout/recycler_view"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+            </RelativeLayout>
+
     </RelativeLayout>
 
 
