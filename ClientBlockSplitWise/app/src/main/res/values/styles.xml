@@ -19,6 +19,7 @@
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <color name="colorActivated">#EEF5DB</color>
     <color name="primary">#333745</color>
     <color name="primaryDark">#22252C</color>

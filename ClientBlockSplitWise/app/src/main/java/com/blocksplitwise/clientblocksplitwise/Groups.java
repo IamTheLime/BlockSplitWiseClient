@@ -74,8 +74,8 @@ public class Groups extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent addGroup = new Intent(Groups.this,GroupAdd.class);
+                startActivityForResult(addGroup,0);
             }
         });
         //Creates popup button whenever the arrow is pressed, Still A WIP
