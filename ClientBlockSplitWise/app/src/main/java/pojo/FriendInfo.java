@@ -1,10 +1,13 @@
 package pojo;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * Created by rui on 23-06-2017.
  */
 
-public class FriendInfo {
+public class FriendInfo implements Serializable {
     private String friendName;
     private int photoId;
 
@@ -36,5 +39,19 @@ public class FriendInfo {
         sb.append(", photoId=").append(photoId);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FriendInfo that = (FriendInfo) o;
+        return photoId == that.photoId &&
+                Objects.equals(friendName, that.friendName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(friendName, photoId);
     }
 }

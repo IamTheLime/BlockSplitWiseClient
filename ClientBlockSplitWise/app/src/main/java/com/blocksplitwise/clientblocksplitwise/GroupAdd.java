@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,12 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pojo.FriendDetailsGroupAdd;
+import pojo.FriendInfo;
 import pojo.GroupDetails;
 
 public class GroupAdd extends AppCompatActivity {
     private String selected = null;
     private RecyclerView recyclerView;
     private List<FriendDetailsGroupAdd> friends;
+    private List<FriendInfo> addedFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class GroupAdd extends AppCompatActivity {
             w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -81,6 +85,7 @@ public class GroupAdd extends AppCompatActivity {
         Button button2 = (Button) findViewById(R.id.button2);
         Button button3 = (Button) findViewById(R.id.button3);
         Button button4 = (Button) findViewById(R.id.button4);
+        CardView addFriend = (CardView) findViewById(R.id.addGroupCardview);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +122,14 @@ public class GroupAdd extends AppCompatActivity {
                 selected = button.getText().toString();
             }
         });
+        addFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CardView button = (CardView) findViewById(R.id.addGroupCardview);
+                Intent goToGroupDetails = new Intent(GroupAdd.this, AddFriendToGroup.class);
+                startActivityForResult(goToGroupDetails, 0);
+            }
+        });
     }
 
     private void resetColors() {
@@ -139,7 +152,8 @@ public class GroupAdd extends AppCompatActivity {
         //Query the server for the group information
         //Initialize the List With The group details
         friends = new ArrayList<>();
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
+        addedFriends = new ArrayList<>();
+        /*friends.add(new FriendDetailsGroupAdd("Tiago"));
         friends.add(new FriendDetailsGroupAdd("Rui"));
         friends.add(new FriendDetailsGroupAdd("Rafa"));
         friends.add(new FriendDetailsGroupAdd("Bernas"));
@@ -152,11 +166,30 @@ public class GroupAdd extends AppCompatActivity {
         friends.add(new FriendDetailsGroupAdd("Bernas"));
         friends.add(new FriendDetailsGroupAdd("Tiago"));
         friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
+        friends.add(new FriendDetailsGroupAdd("Tiago"));*/
 
 
 
     }
+
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                FriendInfo myValue = (FriendInfo) data.getSerializableExtra("FriendName");
+                // use 'myValue' return value here
+                if(!addedFriends.contains(myValue)){
+                    addedFriends.add(myValue);
+                    friends.add(new FriendDetailsGroupAdd(myValue.getfriendName()));
+                    recyclerView.setAdapter(new GroupCreationAdapter(LayoutInflater.from(this),friends,new GroupAdd.GroupRecyclerOnClickHandler(),getAssets()));
+                }
+            }
+        }
+
+
+    }
+
     private class GroupRecyclerOnClickHandler implements RecyclerView.OnClickListener {
         @Override
         public void onClick(final View view) {

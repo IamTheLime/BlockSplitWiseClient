@@ -76,6 +76,8 @@ public class GroupCreationAdapter extends RecyclerView.Adapter<GroupCreationAdap
             super.onAttachedToRecyclerView(recyclerView);
         }
 
+
+
     }
 
 

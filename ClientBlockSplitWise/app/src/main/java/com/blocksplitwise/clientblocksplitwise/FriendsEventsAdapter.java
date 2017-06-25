@@ -27,14 +27,12 @@ public class FriendsEventsAdapter extends RecyclerView.Adapter<FriendsEventsAdap
     public  class FriendViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView friendName;
-        ImageView groupPhoto;
 
 
         FriendViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             friendName = (TextView)itemView.findViewById(R.id.friend_name);
-            groupPhoto = (ImageView)itemView.findViewById(R.id.friend_foto);
             //Changing the fonts
             Typeface face = Typeface.createFromAsset(assets,
                     "font/pragmata.ttf");
@@ -71,7 +69,6 @@ public class FriendsEventsAdapter extends RecyclerView.Adapter<FriendsEventsAdap
     @Override
     public void onBindViewHolder(FriendsEventsAdapter.FriendViewHolder friendViewHolder, int i) {
         friendViewHolder.friendName.setText(friends.get(i).getfriendName());
-        friendViewHolder.groupPhoto.setImageResource(friends.get(i).getPhotoId());
     }
 
     @Override
