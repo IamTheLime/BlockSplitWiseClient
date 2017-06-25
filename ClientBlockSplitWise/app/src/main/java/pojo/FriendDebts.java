@@ -1,20 +1,24 @@
 package pojo;
 
+import java.io.Serializable;
+
 /**
  * Created by rui on 24/06/2017.
  */
 
-public class FriendDebts {
+public class FriendDebts implements Serializable {
 
-    private int amount;
+    private boolean debt;
+    private float amount;
     private String date;
 
-    public FriendDebts(int amount, String date) {
+    public FriendDebts(boolean debt, float amount, String date) {
+        this.debt = debt;
         this.amount = amount;
         this.date = date;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
@@ -34,6 +38,15 @@ public class FriendDebts {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Amount: ").append(amount).append("€");
         sb.append(", date: ").append(date);
+        sb.append(", debt: ").append(debt);
         return sb.toString();
+    }
+
+    public boolean isDebt() {
+        return debt;
+    }
+
+    public void setDebt(boolean debt) {
+        this.debt = debt;
     }
 }

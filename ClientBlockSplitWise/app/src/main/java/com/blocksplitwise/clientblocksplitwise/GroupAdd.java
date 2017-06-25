@@ -153,28 +153,13 @@ public class GroupAdd extends AppCompatActivity {
         //Initialize the List With The group details
         friends = new ArrayList<>();
         addedFriends = new ArrayList<>();
-        /*friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Rui"));
-        friends.add(new FriendDetailsGroupAdd("Rafa"));
-        friends.add(new FriendDetailsGroupAdd("Bernas"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Rui"));
-        friends.add(new FriendDetailsGroupAdd("Rafa"));
-        friends.add(new FriendDetailsGroupAdd("Bernas"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));
-        friends.add(new FriendDetailsGroupAdd("Tiago"));*/
 
 
 
     }
 
 
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 FriendInfo myValue = (FriendInfo) data.getSerializableExtra("FriendName");

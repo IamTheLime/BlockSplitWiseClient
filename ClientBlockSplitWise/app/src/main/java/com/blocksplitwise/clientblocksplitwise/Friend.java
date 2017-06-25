@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -21,8 +22,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -35,11 +34,12 @@ import pojo.FriendInfo;
 public class Friend extends AppCompatActivity {
 
     private TextView mTextMessage;
-    private List<FriendDebts> friends;
+    private List<FriendDebts> debts;
     private RecyclerView recyclerView;
     private TextView friendName;
     private TextView balance;
     private TextView euro;
+    private float debt = 0.0f;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,16 +76,21 @@ public class Friend extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.toolbar_title);
         Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
         tv.setTypeface(face);
-        tv.setText("FRIEND");
+        tv.setText("Add a Debt");
         tv.setTextSize(30);
         ////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
 
-        /*mTextMessage = (TextView) findViewById(R.id.message);
-        mTextMessage.setTypeface(face);
-        mTextMessage.setText("Por aqui cenas relacionadas com a divida?");*/
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addFriend = new Intent(Friend.this,AddDebtFriend.class);
+                startActivityForResult(addFriend,0);
+            }
+        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -100,13 +105,11 @@ public class Friend extends AppCompatActivity {
         balance.setText("Your balance with this friend is:");
         balance.setTextSize(30);
 
-        Random random=new Random();
-        float randomFloat = random.nextFloat() * 1000 - 500;
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
         euro = (TextView) findViewById(R.id.euro);
         euro.setTypeface(face);
-        euro.setText(""+df.format(randomFloat)+"€");
+        euro.setText(""+df.format(debt)+"€");
         euro.setTextSize(100);
 
 
@@ -121,8 +124,32 @@ public class Friend extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
         // This is Just for Test
         initializeData();
-        recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),friends,new Friend.RecyclerOnClickHandler(),getAssets()));
-        recyclerView.setVisibility(View.GONE);
+        //recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),friends,new Friend.RecyclerOnClickHandler(),getAssets()));
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                FriendDebts myValue = (FriendDebts) data.getSerializableExtra("debt");
+                // use 'myValue' return value here
+                if(myValue!=null) {
+                    //Ver se foi para pagar ou receber
+                    if(myValue.isDebt())
+                        debt -= myValue.getAmount();
+                    else
+                        debt += myValue.getAmount();
+                    debts.add(myValue);
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    df.setRoundingMode(RoundingMode.CEILING);
+                    euro = (TextView) findViewById(R.id.euro);
+                    euro.setText(""+df.format(debt)+"€");
+                    recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),debts,new Friend.RecyclerOnClickHandler(),getAssets()));
+                }
+            }
+        }
+
+
     }
 
     @Override
@@ -138,31 +165,7 @@ public class Friend extends AppCompatActivity {
     private void initializeData() {
         //Query the server for the group information
         //Initialize the List With The group details
-        friends = new ArrayList<>();
-        friends.add(new FriendDebts(-10,"01-11-2041"));
-        friends.add(new FriendDebts(5,"01-11-2021"));
-        friends.add(new FriendDebts(-5,"01-11-2067"));
-        friends.add(new FriendDebts(5, "01-11-2754"));
-        friends.add(new FriendDebts(-10,"01-11-2041"));
-        friends.add(new FriendDebts(5,"01-11-2021"));
-        friends.add(new FriendDebts(-5,"01-11-2067"));
-        friends.add(new FriendDebts(5, "01-11-2754"));
-        friends.add(new FriendDebts(-10,"01-11-2041"));
-        friends.add(new FriendDebts(5,"01-11-2021"));
-        friends.add(new FriendDebts(-5,"01-11-2067"));
-        friends.add(new FriendDebts(5, "01-11-2754"));
-        friends.add(new FriendDebts(-10,"01-11-2041"));
-        friends.add(new FriendDebts(5,"01-11-2021"));
-        friends.add(new FriendDebts(-5,"01-11-2067"));
-        friends.add(new FriendDebts(5, "01-11-2754"));
-        friends.add(new FriendDebts(-10,"01-11-2041"));
-        friends.add(new FriendDebts(5,"01-11-2021"));
-        friends.add(new FriendDebts(-5,"01-11-2067"));
-        friends.add(new FriendDebts(5, "01-11-2754"));
-        friends.add(new FriendDebts(-10,"01-11-2041"));
-        friends.add(new FriendDebts(5,"01-11-2021"));
-        friends.add(new FriendDebts(-5,"01-11-2067"));
-        friends.add(new FriendDebts(5, "01-11-2754"));
+        debts = new ArrayList<>();
 
     }
 
@@ -170,7 +173,7 @@ public class Friend extends AppCompatActivity {
         @Override
         public void onClick(final View view) {
             int itemPosition = recyclerView.getChildLayoutPosition(view);
-            FriendDebts item = friends.get(itemPosition);
+            FriendDebts item = debts.get(itemPosition);
             //Toast.makeText(Friend.this, item.toString(),Toast.LENGTH_SHORT).show();
             Snackbar.make(view, item.toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

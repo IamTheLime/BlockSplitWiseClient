@@ -24,8 +24,11 @@ import com.alorma.timeline.RoundTimelineView;
 import com.alorma.timeline.TimelineView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import pojo.FriendDebts;
 import pojo.GroupDetails;
 
 public class Group extends AppCompatActivity {
@@ -56,8 +59,8 @@ public class Group extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent addDebt = new Intent(Group.this,AddGroupDebt.class);
+                startActivityForResult(addDebt,0);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,6 +87,29 @@ public class Group extends AppCompatActivity {
         //Extras
         initfonts();
     }
+
+    /* ---------> Handler de criar uma nova divida para o grupo <--------
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                FriendDebts myValue = (FriendDebts) data.getSerializableExtra("debt");
+                // use 'myValue' return value here
+                if(myValue!=null) {
+                    //Ver se foi para pagar ou receber
+                    if(myValue.isDebt())
+                        debt -= myValue.getAmount();
+                    else
+                        debt += myValue.getAmount();
+                    // Adicionar as dividas
+                    items.add(myValue);
+                    recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),friends,new Friend.RecyclerOnClickHandler(),getAssets()));
+                }
+            }
+        }
+
+
+    }*/
 
 
     private void initfonts(){

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import pojo.FriendDetailsGroupAdd;
 import pojo.FriendInfo;
 
 public class Friends extends AppCompatActivity {
@@ -47,6 +49,18 @@ public class Friends extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
 
+
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addFriend = new Intent(Friends.this,AddFriend.class);
+                startActivityForResult(addFriend,0);
+            }
+        });
+
         //Code to Implement the scrollable groups
         recyclerView = (RecyclerView) findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
@@ -57,10 +71,25 @@ public class Friends extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
         // This is Just for Test
         initializeData();
-        recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this),friends,new Friends.RecyclerOnClickHandler(),getAssets()));
 
         //EXTRAS
         //initfonts();
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String myValue = data.getStringExtra("friend");
+                // use 'myValue' return value here
+                if(myValue!=null) {
+                    friends.add(new FriendInfo(myValue,R.mipmap.ic_costanza));
+                    recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this), friends, new Friends.RecyclerOnClickHandler(), getAssets()));
+                }
+            }
+        }
+
 
     }
 
@@ -75,32 +104,6 @@ public class Friends extends AppCompatActivity {
         //Query the server for the group information
         //Initialize the List With The group details
         friends = new ArrayList<>();
-        friends.add(new FriendInfo("General Expenses1", R.mipmap.ic_money));
-        friends.add(new FriendInfo("General Expenses2", R.mipmap.ic_money));
-        friends.add(new FriendInfo("House Expenses1", R.mipmap.ic_house));
-        friends.add(new FriendInfo("House Expenses2", R.mipmap.ic_house));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-
-        friends.add(new FriendInfo("General Expenses1", R.mipmap.ic_money));
-        friends.add(new FriendInfo("General Expenses2", R.mipmap.ic_money));
-        friends.add(new FriendInfo("House Expenses1", R.mipmap.ic_house));
-        friends.add(new FriendInfo("House Expenses2", R.mipmap.ic_house));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-
-        friends.add(new FriendInfo("General Expenses1", R.mipmap.ic_money));
-        friends.add(new FriendInfo("General Expenses2", R.mipmap.ic_money));
-        friends.add(new FriendInfo("House Expenses1", R.mipmap.ic_house));
-        friends.add(new FriendInfo("House Expenses2", R.mipmap.ic_house));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-        friends.add(new FriendInfo("General Expenses1", R.mipmap.ic_money));
-        friends.add(new FriendInfo("General Expenses2", R.mipmap.ic_money));
-        friends.add(new FriendInfo("House Expenses1", R.mipmap.ic_house));
-        friends.add(new FriendInfo("House Expenses2", R.mipmap.ic_house));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
-        friends.add(new FriendInfo("Party Group1", R.mipmap.ic_party));
 
     }
 

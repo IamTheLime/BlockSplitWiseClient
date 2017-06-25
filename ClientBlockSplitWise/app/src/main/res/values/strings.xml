@@ -30,4 +30,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="amount">Amount</string>
+
+    <string-array name="debts_options">
+        <item>You owe</item>
+        <item>Owes you</item>
+    </string-array>
 </resources>

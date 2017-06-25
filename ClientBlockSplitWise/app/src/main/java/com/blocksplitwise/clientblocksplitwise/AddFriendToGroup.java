@@ -87,8 +87,6 @@ public class AddFriendToGroup extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent returnIntent = new Intent();
-        //returnIntent.putExtra("result",result);
-        //Pode ser activity.result_OK
         setResult(Activity.RESULT_CANCELED,returnIntent);
         finish();
         return true;
