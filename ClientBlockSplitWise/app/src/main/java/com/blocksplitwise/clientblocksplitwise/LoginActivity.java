@@ -400,7 +400,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://alcetipe.dyndns.org:9000/users/"+params[0]);}
+                myEndpoint = new URL("http://" + R.string.connect  + ":9000/users/"+params[0]);}
             catch(Exception e) {
                     e.printStackTrace();
                 return false;
@@ -420,6 +420,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString((params[0]+":"+params[1]).getBytes(),Base64.DEFAULT));
 
                 if (myConnection.getResponseCode() == 200) {
+
 
                     //showProgress(true);
                     Authenticator.setDefault(new Authenticator() {
@@ -475,7 +476,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://192.168.1.29:9000/newuser");}
+                myEndpoint = new URL("http://" + R.string.connect + ":9000/newuser");}
             catch(Exception e) {
                 e.printStackTrace();
                 return false;

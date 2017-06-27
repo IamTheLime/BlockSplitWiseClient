@@ -1,8 +1,11 @@
 package com.blocksplitwise.clientblocksplitwise;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +17,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +28,14 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,4 +198,120 @@ public class GroupAdd extends AppCompatActivity {
             //startActivityForResult(goToGroupDetails, 0);
         }
     }
+
+    private class GroupRegisterer extends AsyncTask<String,Void,Boolean> {
+        private String groupName;
+        private String description;
+        private ArrayList<String> members;
+        private HttpURLConnection myConnection;
+        /*
+        * params[>1] - lista de utilizadores para adicionar ao grupo
+        * params[0] - nome do grupo
+        * params[1] - descricao do grupo
+        * */
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            System.out.print("Im here");
+            URL myEndpoint = null;
+            groupName = params[0];
+            description = params[1];
+            members = new ArrayList<>();
+            try {
+                myEndpoint = new URL("http://" + R.string.connect + "/groupreg");}
+            catch(Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            // Create connection
+            myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();}
+            catch (Exception e){
+                e.printStackTrace();
+                return false;}
+
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("POST");
+                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString(("null:null").getBytes(),Base64.DEFAULT));
+                myConnection.setRequestProperty("Content-Type","application/json");
+                String registerJSON = "{\"users\":[" + params[2];
+                members.add(params[2]);
+                for(int i = 3; i < params.length; i++) {
+                    registerJSON = registerJSON + "," + params[i];
+                    members.add(params[i]);
+                }
+
+                registerJSON = registerJSON + "],\"identifier\":\" "+ params[0] +" \",\"description\":\" " + params[1] + "\"}";
+                byte[] outputInBytes = registerJSON.getBytes("UTF-8");
+                OutputStream os = myConnection.getOutputStream();
+                os.write(outputInBytes);
+                os.flush();
+                os.close();
+
+                if (myConnection.getResponseCode() == 200) {
+
+                    Authenticator.setDefault(new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(params[0],params[1].toCharArray());
+                        }
+                    });
+                    return true;
+
+                }
+                else if (myConnection.getResponseCode() == 409) {
+                    return false;
+                }
+                else{
+                    return false;
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            /*BufferedReader inHttp = null;
+            try {
+                inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String body = null;
+            try {
+                body = inHttp.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
+            if(aBoolean==true){
+
+                GroupDetails gd = new GroupDetails(groupName,description,members,R.mipmap.ic_money);
+
+                Intent intent = getIntent();
+                intent.putExtra("group",gd);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+            else{
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+                finish();
+                return;
+            }
+        }
+    }
+    
 }

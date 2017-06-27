@@ -36,6 +36,10 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
@@ -133,12 +137,14 @@ public class Groups extends AppCompatActivity {
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://10.0.2.2:9000/users/rui");}catch(Exception e) {e.printStackTrace();}
+                myEndpoint = new URL("http://10.0.2.2:9000/users/rui");
+            }catch(Exception e) {e.printStackTrace();}
             // Create connection
             HttpURLConnection myConnection = null;
             try{
                 myConnection =
-                        (HttpURLConnection) myEndpoint.openConnection();}catch (Exception e){e.printStackTrace();}
+                        (HttpURLConnection) myEndpoint.openConnection();
+            }catch (Exception e){e.printStackTrace();}
 
             // Enable writing
             try{
@@ -185,6 +191,111 @@ public class Groups extends AppCompatActivity {
             Intent goToGroupDetails = new Intent(Groups.this, Group.class);
             goToGroupDetails.putExtra("GroupValue", item);
             startActivityForResult(goToGroupDetails, 0);
+        }
+    }
+
+
+    private class GroupRegisterer extends AsyncTask<String,Void,Boolean> {
+        private String groupName;
+        private String description;
+        private ArrayList<String> members;
+        private HttpURLConnection myConnection;
+        /*
+        * params[>1] - lista de utilizadores para adicionar ao grupo
+        * params[0] - nome do grupo
+        * params[1] - descricao do grupo
+        * */
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            System.out.print("Im here");
+            URL myEndpoint = null;
+            groupName = params[0];
+            description = params[1];
+            members = new ArrayList<>();
+            try {
+                myEndpoint = new URL("http://" + R.string.connect + ":9000/users/bernardo");}
+            catch(Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            // Create connection
+            myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();}
+            catch (Exception e){
+                e.printStackTrace();
+                return false;}
+
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("POST");
+                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString(("null:null").getBytes(),Base64.DEFAULT));
+                myConnection.setRequestProperty("Content-Type","application/json");
+                String registerJSON = "{\"users\":[" + "bernardo";
+                registerJSON = registerJSON + "],\"identifier\":\" "+ params[0] +" \",\"description\":\" " + params[1] + "\"}";
+                byte[] outputInBytes = registerJSON.getBytes("UTF-8");
+                OutputStream os = myConnection.getOutputStream();
+                os.write(outputInBytes);
+                os.flush();
+                os.close();
+
+                if (myConnection.getResponseCode() == 200) {
+
+                    Authenticator.setDefault(new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(params[0],params[1].toCharArray());
+                        }
+                    });
+                    return true;
+
+                }
+                else if (myConnection.getResponseCode() == 409) {
+                    return false;
+                }
+                else{
+                    return false;
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            BufferedReader inHttp = null;
+
+            if(aBoolean==true){
+                try {
+                    inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String body = null;
+                try {
+                    body = inHttp.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+            else{
+                /*Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+                finish();
+                return;*/
+            }
         }
     }
 }
