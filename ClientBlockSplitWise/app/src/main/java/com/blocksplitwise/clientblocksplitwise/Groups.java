@@ -2,56 +2,35 @@ package com.blocksplitwise.clientblocksplitwise;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Typeface;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.PasswordAuthentication;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import pojo.GroupDetails;
+import pojo.State;
 
 public class Groups extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private List<GroupDetails> groups;
+    private GroupDetails gd;
+    private List<String> groupsIDs;
+    private State state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +82,14 @@ public class Groups extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
         // This is Just for Test
         initializeData();
-        recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(this),groups,new GroupRecyclerOnClickHandler(),getAssets()));
+        /*try {
+            getGroups();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+        recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(Groups.this),state.getGroups(),new GroupRecyclerOnClickHandler(),getAssets()));
 
         //EXTRAS
         initfonts();
@@ -116,65 +102,42 @@ public class Groups extends AppCompatActivity {
         ((TextView)findViewById(R.id.textView3)).setTypeface(face);
     }
 
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                GroupDetails myValue = (GroupDetails) data.getSerializableExtra("group");
+                // use 'myValue' return value here
+                if(myValue!=null) {
+                    state.addGroup(myValue);
+                    recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(Groups.this),state.getGroups(),new GroupRecyclerOnClickHandler(),getAssets()));
+                }
+            }
+            else return;
+        }
+
+
+    }
+
     private void initializeData() {
         //Query the server for the group information
         //Initialize the List With The group details
-        groups = new ArrayList<>();
-        groups.add(new GroupDetails("General Expenses1", "This is just a group", R.mipmap.ic_money));
+        groupsIDs = new ArrayList<>();
+        Bundle bundle = getIntent().getExtras();
+        state = (State) bundle.get("state");
+        /*groups.add(new GroupDetails("General Expenses1", "This is just a group", R.mipmap.ic_money));
         groups.add(new GroupDetails("General Expenses2", "This is just a group", R.mipmap.ic_money));
         groups.add(new GroupDetails("House Expenses1", "This is another group", R.mipmap.ic_house));
         groups.add(new GroupDetails("House Expenses2", "This is another group", R.mipmap.ic_house));
         groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));
-        groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));
-
-    }
-
-    private class loadData extends AsyncTask<String,Void,Boolean> {
-        private String email;
-        private String password;
-        @Override
-        protected Boolean doInBackground(final String... params) {
-            URL myEndpoint = null;
-            email = params[0];password=params[1];
-            try {
-                myEndpoint = new URL("http://10.0.2.2:9000/users/rui");
-            }catch(Exception e) {e.printStackTrace();}
-            // Create connection
-            HttpURLConnection myConnection = null;
-            try{
-                myConnection =
-                        (HttpURLConnection) myEndpoint.openConnection();
-            }catch (Exception e){e.printStackTrace();}
-
-            // Enable writing
-            try{
-                myConnection.setRequestMethod("GET");
-                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString((params[0]+":"+params[1]).getBytes(),Base64.DEFAULT));
-
-                if (myConnection.getResponseCode() == 200) {
-                    //showProgress(true);
-                    Authenticator.setDefault(new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(params[0],params[1].toCharArray());
-                        }
-                    });
-                    return true;
-
-                }
-                else{
-                    return false;
-                }
-
-            }catch(Exception e){e.printStackTrace();return false;}
-        }
+        groups.add(new GroupDetails("Party Group1", "This is yet another group", R.mipmap.ic_party));*/
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent returnIntent = new Intent();
-        //returnIntent.putExtra("result",result);
+        returnIntent.putExtra("state",state);
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
         return true;
@@ -187,115 +150,11 @@ public class Groups extends AppCompatActivity {
         @Override
         public void onClick(final View view) {
             int itemPosition = recyclerView.getChildLayoutPosition(view);
-            GroupDetails item = groups.get(itemPosition);
+            GroupDetails item = state.getGroupPosition(itemPosition);
             Intent goToGroupDetails = new Intent(Groups.this, Group.class);
             goToGroupDetails.putExtra("GroupValue", item);
-            startActivityForResult(goToGroupDetails, 0);
-        }
-    }
-
-
-    private class GroupRegisterer extends AsyncTask<String,Void,Boolean> {
-        private String groupName;
-        private String description;
-        private ArrayList<String> members;
-        private HttpURLConnection myConnection;
-        /*
-        * params[>1] - lista de utilizadores para adicionar ao grupo
-        * params[0] - nome do grupo
-        * params[1] - descricao do grupo
-        * */
-        @Override
-        protected Boolean doInBackground(final String... params) {
-            System.out.print("Im here");
-            URL myEndpoint = null;
-            groupName = params[0];
-            description = params[1];
-            members = new ArrayList<>();
-            try {
-                myEndpoint = new URL("http://" + R.string.connect + ":9000/users/bernardo");}
-            catch(Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            // Create connection
-            myConnection = null;
-            try{
-                myConnection =
-                        (HttpURLConnection) myEndpoint.openConnection();}
-            catch (Exception e){
-                e.printStackTrace();
-                return false;}
-
-            // Enable writing
-            try{
-                myConnection.setRequestMethod("POST");
-                myConnection.setRequestProperty  ("Authorization", "Basic " + Base64.encodeToString(("null:null").getBytes(),Base64.DEFAULT));
-                myConnection.setRequestProperty("Content-Type","application/json");
-                String registerJSON = "{\"users\":[" + "bernardo";
-                registerJSON = registerJSON + "],\"identifier\":\" "+ params[0] +" \",\"description\":\" " + params[1] + "\"}";
-                byte[] outputInBytes = registerJSON.getBytes("UTF-8");
-                OutputStream os = myConnection.getOutputStream();
-                os.write(outputInBytes);
-                os.flush();
-                os.close();
-
-                if (myConnection.getResponseCode() == 200) {
-
-                    Authenticator.setDefault(new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(params[0],params[1].toCharArray());
-                        }
-                    });
-                    return true;
-
-                }
-                else if (myConnection.getResponseCode() == 409) {
-                    return false;
-                }
-                else{
-                    return false;
-                }
-
-            }
-            catch(Exception e){
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            BufferedReader inHttp = null;
-
-            if(aBoolean==true){
-                try {
-                    inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                String body = null;
-                try {
-                    body = inHttp.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-            else{
-                /*Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED,returnIntent);
-                finish();
-                return;*/
-            }
+            goToGroupDetails.putExtra("state",state);
+            startActivityForResult(goToGroupDetails, 1);
         }
     }
 }

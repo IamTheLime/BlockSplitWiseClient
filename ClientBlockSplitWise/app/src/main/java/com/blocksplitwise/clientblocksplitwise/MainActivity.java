@@ -2,25 +2,44 @@ package com.blocksplitwise.clientblocksplitwise;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import pojo.FriendInfo;
+import pojo.GroupDetails;
+import pojo.State;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private State state;
+    private ArrayList<String> groupsIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +87,17 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         Bundle bundle = getIntent().getExtras();
         String loginInfo = bundle.getString("Login");
+        state = (State) bundle.get("state");
+        if(state==null)
+            state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
+        MainActivity.GroupRegisterer gr = new MainActivity.GroupRegisterer();
+        try {
+            gr.execute(loginInfo).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         ((TextView) findViewById(R.id.navbarTitle)).setText("BlockSplitwise Client");
         ((TextView) findViewById(R.id.textView)).setText(loginInfo);
         return true;
@@ -101,6 +131,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(goToFriends,0);
         } else if (id == R.id.groups) {
             Intent goToGroups = new Intent(this,Groups.class);
+            goToGroups.putExtra("state",state);
             startActivityForResult(goToGroups,0);
         } else if (id == R.id.nav_share) {
 
@@ -126,4 +157,242 @@ public class MainActivity extends AppCompatActivity
             //Just do nothing
         }
     }
+
+
+    private class GroupRegisterer extends AsyncTask<String,Void,Boolean> {
+        private String user;
+        private String password;
+        BufferedReader inHttp = null;
+        /*
+        * params[0] - user
+        * */
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            System.out.print("Im here");
+            user = params[0];
+            URL myEndpoint = null;
+            HttpURLConnection myConnection = null;
+            try {
+                myEndpoint = new URL("http://192.168.1.4:9000/users/"+user);}
+            catch(Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            // Create connection
+            myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();}
+            catch (Exception e){
+                e.printStackTrace();
+                return false;}
+
+            // Enable writing
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("GET");
+
+                if (myConnection.getResponseCode() == 200) {
+                    try {
+                        inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+
+                }
+                else{
+                    return false;
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        private ArrayList<String> getGroupsByIdentifier() {
+            ArrayList<String> res = new ArrayList<>();
+
+            String body = null;
+            try {
+                body = inHttp.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            JSONObject jObj =null;
+            JSONArray jArr = null;
+
+            try {
+                jObj = new JSONObject(body);
+                jArr = jObj.getJSONArray("groups");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for(int i = 0; i < jArr.length(); i++) {
+                try {
+                    String group = (String) jArr.get(i);
+                    res.add(group);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return res;
+        }
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+
+            if(aBoolean==true){
+                groupsIDs = getGroupsByIdentifier();
+
+
+                for(String s: groupsIDs) {
+                    Toast.makeText(MainActivity.this,"YOLO : " + s,Toast.LENGTH_SHORT).show();
+                    MainActivity.GetGroups gg = new MainActivity.GetGroups();
+                    try {
+                        gg.execute("rui", s).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                /*for(String s: ids) {
+                    groups.add(getGroupById(s));
+                }
+                if(groups.size()!=0)recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(Groups.this),groups,new GroupRecyclerOnClickHandler(),getAssets()));*/
+
+                return;
+            }
+            else{
+                /*Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+                finish();
+                return;*/
+            }
+        }
+    }
+
+    private class GetGroups extends AsyncTask<String,Void,Boolean> {
+        private String user;
+        private String groupID;
+        private HttpURLConnection myConnection;
+        /*
+        * params[0] - user
+        * params[1] - groupid
+        * */
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Im here");
+            user = params[0];
+            groupID = params[1];
+            URL myEndpoint = null;
+            try {
+                myEndpoint = new URL("http://192.168.1.4:9000/groups/"+groupID);}
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+            // Create connection
+            myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();
+            }
+            catch (Exception e){
+                e.printStackTrace();}
+
+            // Enable writing
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("GET");
+
+                if (myConnection.getResponseCode() == 200) {
+                    return true;
+
+                }
+                else{
+                    return false;
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+
+            if(aBoolean==true){
+                BufferedReader inHttp = null;
+                try {
+                    inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String body = null;
+                try {
+                    body = inHttp.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                JSONObject jObj =null;
+                JSONArray jArr = null;
+
+                try {
+                    jObj = new JSONObject(body);
+                    jArr = jObj.getJSONArray("users");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String gname = null;
+                String desc = null;
+                ArrayList<String> members = null;
+                try {
+                    gname = jObj.getString("name");
+                    desc = jObj.getString("desc");
+                    members = new ArrayList<>();
+
+                    for (int i = 0; i < jArr.length();i++) {
+                        members.add((String) jArr.get(i));
+                    }
+
+                    GroupDetails gd;
+
+                    gd = new GroupDetails(gname,desc,members,R.mipmap.ic_money);
+                    state.addGroup(gd);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                return;
+            }
+            else{
+                /*Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+                finish();
+                return;*/
+            }
+        }
+    }
+
+
 }

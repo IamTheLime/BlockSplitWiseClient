@@ -75,10 +75,10 @@ public class AddFriendToGroup extends AppCompatActivity {
         //Query the server for the group information
         //Initialize the List With The group details
         friends = new ArrayList<>();
-        friends.add(new FriendInfo("Rui", R.mipmap.ic_money));
-        friends.add(new FriendInfo("Tiago", R.mipmap.ic_money));
-        friends.add(new FriendInfo("Bernardo", R.mipmap.ic_house));
-        friends.add(new FriendInfo("Rafa", R.mipmap.ic_house));
+        friends.add(new FriendInfo("rui", R.mipmap.ic_money));
+        friends.add(new FriendInfo("tiago", R.mipmap.ic_money));
+        friends.add(new FriendInfo("bernardo", R.mipmap.ic_house));
+        friends.add(new FriendInfo("rafa", R.mipmap.ic_house));
 
     }
 

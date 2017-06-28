@@ -55,6 +55,13 @@ public class GroupDetails implements Serializable {
         this.members = new ArrayList<>();
     }
 
+    public GroupDetails(GroupDetails gd) {
+        this.groupName = gd.getGroupName();
+        this.groupInfo = gd.getGroupInfo();
+        this.photoId = gd.getPhotoId();
+        this.members = gd.getMembers();
+    }
+
     public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, int photoId) {
         this.groupName = groupName;
         this.groupInfo = groupInfo;
@@ -62,5 +69,9 @@ public class GroupDetails implements Serializable {
         this.members = new ArrayList<>();
         for (String s: members)
             this.members.add(s);
+    }
+
+    public GroupDetails clone() {
+        return new GroupDetails(this);
     }
 }

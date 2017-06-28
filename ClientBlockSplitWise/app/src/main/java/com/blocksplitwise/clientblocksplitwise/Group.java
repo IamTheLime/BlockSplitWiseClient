@@ -1,5 +1,6 @@
 package com.blocksplitwise.clientblocksplitwise;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,10 +32,12 @@ import java.util.ArrayList;
 
 import pojo.FriendDebts;
 import pojo.GroupDetails;
+import pojo.State;
 
 public class Group extends AppCompatActivity {
     private RecyclerView list;
     private ArrayList<Event> items;
+    private State state;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -123,17 +127,9 @@ public class Group extends AppCompatActivity {
 
     private void fillItems(){
         items = new ArrayList<>();
-        items.add(new Event("01-02-2017", TimelineView.TYPE_START));
-        items.add(new Event("02-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("03-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("04-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("05-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("06-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("07-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("08-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("09-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("10-02-2017", RoundTimelineView.TYPE_MIDDLE));
-        items.add(new Event("11-02-2017", RoundTimelineView.TYPE_END));
+        Bundle bundle = getIntent().getExtras();
+        state = (State) bundle.get("state");
+
     }
 
     protected class EventClickHandler implements RecyclerView.OnClickListener{
@@ -146,6 +142,18 @@ public class Group extends AppCompatActivity {
             //goToGroupDetails.putExtra("GroupValue",item);
            // startActivityForResult(goToGroupDetails,0);
         }
+    }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("state",state);
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
+        return true;
     }
 
 }

@@ -1,5 +1,7 @@
 package pojo;
 
+import com.blocksplitwise.clientblocksplitwise.Friend;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -20,16 +22,8 @@ public class FriendInfo implements Serializable {
         return friendName;
     }
 
-    public void setfriendName(String friendName) {
-        this.friendName = friendName;
-    }
-
     public int getPhotoId() {
         return photoId;
-    }
-
-    public void setPhotoId(int photoId) {
-        this.photoId = photoId;
     }
 
     @Override
@@ -48,6 +42,10 @@ public class FriendInfo implements Serializable {
         FriendInfo that = (FriendInfo) o;
         return photoId == that.photoId &&
                 Objects.equals(friendName, that.friendName);
+    }
+
+    public FriendInfo clone() {
+        return new FriendInfo(this.friendName,this.photoId);
     }
 
     @Override

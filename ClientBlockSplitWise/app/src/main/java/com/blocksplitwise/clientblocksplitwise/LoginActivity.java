@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -273,12 +274,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             ///////////THIS IS ONLY A TEST///////////////////////
             Registerer registerer = new Registerer();
-            registerer.execute(email,password);
-
             showProgress(true);
             try {
-                Thread.sleep(1000);
-            }catch (Exception e){
+                registerer.execute(email,password).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
                 e.printStackTrace();
             }
             showProgress(false);
@@ -400,7 +401,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://" + R.string.connect  + ":9000/users/"+params[0]);}
+                myEndpoint = new URL("http://192.168.1.4:9000/users/"+params[0]);}
             catch(Exception e) {
                     e.printStackTrace();
                 return false;
@@ -476,7 +477,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://" + R.string.connect + ":9000/newuser");}
+                myEndpoint = new URL("http://192.168.1.4:9000/newuser");}
             catch(Exception e) {
                 e.printStackTrace();
                 return false;
@@ -488,7 +489,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         (HttpURLConnection) myEndpoint.openConnection();}
             catch (Exception e){
                 e.printStackTrace();
-                return false;}
+                return false;
+            }
 
             // Enable writing
             try{
