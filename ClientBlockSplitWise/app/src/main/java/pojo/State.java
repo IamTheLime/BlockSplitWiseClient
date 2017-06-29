@@ -1,5 +1,7 @@
 package pojo;
 
+import android.app.Application;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +10,17 @@ import java.util.List;
  * Created by rui on 28/06/2017.
  */
 
-public class State implements Serializable{
+public class State extends Application implements Serializable{
 
     private String userName;
     private List<FriendInfo> friends;
     private List<GroupDetails> groups;
+
+    public State() {
+        userName = null;
+        friends = new ArrayList<>();
+        groups = new ArrayList<>();
+    }
 
     public State(String userName, List<FriendInfo> friends, List<GroupDetails> groups) {
         this.userName = userName;
@@ -32,6 +40,10 @@ public class State implements Serializable{
         for(GroupDetails gd: groups)
             res.add(gd.clone());
         return res;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void addGroup(GroupDetails gd) {

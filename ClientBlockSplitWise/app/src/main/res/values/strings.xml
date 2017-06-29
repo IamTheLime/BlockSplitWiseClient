@@ -31,10 +31,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="amount">Amount</string>
-    <string name="connect">193.168.1.4</string>
+    <string name="connection">192.168.1.3</string>
 
     <string-array name="debts_options">
-        <item>You owe</item>
-        <item>Owes you</item>
+        <item>SPLIT DEBT EQUALLY AMONGST MEMBERS</item>
+        <item>YOU WILL PAY ALL THE DEBT</item>
+        <item>SELECT MANUALLY ALL THE PERCENTAGES</item>
     </string-array>
 </resources>

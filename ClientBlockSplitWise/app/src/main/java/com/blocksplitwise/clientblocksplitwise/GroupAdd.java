@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,9 +36,11 @@ import java.util.List;
 import pojo.FriendDetailsGroupAdd;
 import pojo.FriendInfo;
 import pojo.GroupDetails;
+import pojo.State;
 
 public class GroupAdd extends AppCompatActivity {
     private String selected = null;
+    private State state;
     private RecyclerView recyclerView;
     private List<FriendDetailsGroupAdd> friends = null;
     private List<FriendInfo> addedFriends;
@@ -135,7 +138,7 @@ public class GroupAdd extends AppCompatActivity {
                 GroupAdd.GroupRegisterer gr = new GroupRegisterer();
                 EditText egName = (EditText) findViewById(R.id.editText);
                 String gName = egName.getText().toString();
-                String sFriends = "\"rui\"";
+                String sFriends = "\""+ state.getUserName()+ "\"";
                 if(friends.size()<1) {
                     Toast.makeText(GroupAdd.this,"You can't make a group on your own",Toast.LENGTH_SHORT).show();
                     return;
@@ -178,9 +181,15 @@ public class GroupAdd extends AppCompatActivity {
         //Initialize the List With The group details
         friends = new ArrayList<>();
         addedFriends = new ArrayList<>();
+        state = (State) getApplicationContext();
+    }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
+        return true;
     }
 
 
@@ -238,7 +247,7 @@ public class GroupAdd extends AppCompatActivity {
             gMembers = params[4];
             members = new ArrayList<>();
             try {
-                myEndpoint = new URL("http://192.168.1.4:9000/groupreg");}
+                myEndpoint = new URL("http://"+getString(R.string.connection)+":9000/groupreg");}
             catch(Exception e) {
                 e.printStackTrace();
                 return false;
@@ -293,6 +302,8 @@ public class GroupAdd extends AppCompatActivity {
             if(aBoolean==true){
 
                 GroupDetails gd = new GroupDetails(groupName,description,members,R.mipmap.ic_money);
+
+                System.out.println(gd.toString());
 
                 Intent intent = getIntent();
                 intent.putExtra("group",gd);

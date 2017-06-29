@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         super.onCreate(savedInstanceState);
+        state = (State) getApplicationContext();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         /////////////////////////////FONT TOP///////////////////////////////////////
@@ -86,7 +87,9 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         Bundle bundle = getIntent().getExtras();
         String loginInfo = bundle.getString("Login");
-        state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
+        //state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
+        state.setUserName(loginInfo);
+        Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();
         MainActivity.GroupRegisterer gr = new MainActivity.GroupRegisterer();
         try {
             gr.execute(loginInfo).get();
@@ -125,11 +128,9 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.friends) {
             Intent goToFriends = new Intent(this,Friends.class);
-            goToFriends.putExtra("state",state);
             startActivityForResult(goToFriends,0);
         } else if (id == R.id.groups) {
             Intent goToGroups = new Intent(this,Groups.class);
-            goToGroups.putExtra("state",state);
             startActivityForResult(goToGroups,0);
         } else if (id == R.id.nav_share) {
 
@@ -150,12 +151,11 @@ public class MainActivity extends AppCompatActivity
         // Make sure the request was successful
         if (resultCode == RESULT_OK) {
             //There are no intent with data
-            Bundle bundle = getIntent().getExtras();
-            /*state = (State) bundle.get("state");
-            Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();*/
+            Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();
         }
         if (resultCode == RESULT_CANCELED){
             //Just do nothing
+            Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
             URL myEndpoint = null;
             HttpURLConnection myConnection = null;
             try {
-                myEndpoint = new URL("http://192.168.1.4:9000/users/"+user);}
+                myEndpoint = new URL("http://"+getResources().getString(R.string.connection)+":9000/users/"+user);}
             catch(Exception e) {
                 e.printStackTrace();
                 return false;
@@ -256,7 +256,6 @@ public class MainActivity extends AppCompatActivity
 
 
                 for(String s: groupsIDs) {
-                    Toast.makeText(MainActivity.this,"YOLO : " + s,Toast.LENGTH_SHORT).show();
                     MainActivity.GetGroups gg = new MainActivity.GetGroups();
                     try {
                         gg.execute("rui", s).get();
@@ -297,7 +296,7 @@ public class MainActivity extends AppCompatActivity
             groupID = params[1];
             URL myEndpoint = null;
             try {
-                myEndpoint = new URL("http://192.168.1.4:9000/groups/"+groupID);}
+                myEndpoint = new URL("http://"+getResources().getString(R.string.connection)+":9000/groups/"+groupID);}
             catch(Exception e) {
                 e.printStackTrace();
             }

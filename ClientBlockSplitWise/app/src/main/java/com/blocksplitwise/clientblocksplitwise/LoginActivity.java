@@ -401,7 +401,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://192.168.1.4:9000/users/"+params[0]);}
+                myEndpoint = new URL("http://"+getResources().getString(R.string.connection)+":9000/users/"+params[0]);}
             catch(Exception e) {
                     e.printStackTrace();
                 return false;
@@ -477,7 +477,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             URL myEndpoint = null;
             email = params[0];password=params[1];
             try {
-                myEndpoint = new URL("http://192.168.1.4:9000/newuser");}
+                myEndpoint = new URL("http://"+getResources().getString(R.string.connection)+":9000/newuser");}
             catch(Exception e) {
                 e.printStackTrace();
                 return false;

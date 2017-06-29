@@ -34,11 +34,11 @@ import pojo.FriendInfo;
 public class Friend extends AppCompatActivity {
 
     private TextView mTextMessage;
-    private List<FriendDebts> debts;
     private RecyclerView recyclerView;
     private TextView friendName;
     private TextView balance;
     private TextView euro;
+    private ArrayList<String> friends;
     private float debt = 0.0f;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -135,16 +135,15 @@ public class Friend extends AppCompatActivity {
                 // use 'myValue' return value here
                 if(myValue!=null) {
                     //Ver se foi para pagar ou receber
-                    if(myValue.isDebt())
+                    /*if(myValue.isDebt())
                         debt -= myValue.getAmount();
                     else
                         debt += myValue.getAmount();
-                    debts.add(myValue);
                     DecimalFormat df = new DecimalFormat("#.##");
                     df.setRoundingMode(RoundingMode.CEILING);
                     euro = (TextView) findViewById(R.id.euro);
                     euro.setText(""+df.format(debt)+"€");
-                    recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),debts,new Friend.RecyclerOnClickHandler(),getAssets()));
+                    recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),debts,new Friend.RecyclerOnClickHandler(),getAssets()));*/
                 }
             }
         }
@@ -165,7 +164,7 @@ public class Friend extends AppCompatActivity {
     private void initializeData() {
         //Query the server for the group information
         //Initialize the List With The group details
-        debts = new ArrayList<>();
+        //debts = new ArrayList<>();
 
     }
 
@@ -173,10 +172,10 @@ public class Friend extends AppCompatActivity {
         @Override
         public void onClick(final View view) {
             int itemPosition = recyclerView.getChildLayoutPosition(view);
-            FriendDebts item = debts.get(itemPosition);
+            //FriendDebts item = debts.get(itemPosition);
             //Toast.makeText(Friend.this, item.toString(),Toast.LENGTH_SHORT).show();
-            Snackbar.make(view, item.toString(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            /*Snackbar.make(view, item.toString(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();*/
         }
     }
 

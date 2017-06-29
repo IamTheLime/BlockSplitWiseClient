@@ -16,13 +16,14 @@ import java.util.List;
 
 import pojo.FriendDebts;
 import pojo.FriendInfo;
+import pojo.GroupDetails;
 
 /**
  * Created by rui on 24/06/2017.
  */
 
 public class FriendEventAdapter extends RecyclerView.Adapter<FriendEventAdapter.FriendViewHolder>{
-    private List<FriendDebts> friends;
+    private List<String> friends;
     private  View.OnClickListener clickListener = null;
     private final LayoutInflater inflater;
     private final AssetManager assets;
@@ -37,7 +38,6 @@ public class FriendEventAdapter extends RecyclerView.Adapter<FriendEventAdapter.
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             amount = (TextView)itemView.findViewById(R.id.amount);
-            date = (TextView)itemView.findViewById(R.id.date);
             //Changing the fonts
             Typeface face = Typeface.createFromAsset(assets,
                     "font/pragmata.ttf");
@@ -48,7 +48,7 @@ public class FriendEventAdapter extends RecyclerView.Adapter<FriendEventAdapter.
 
     }
 
-    FriendEventAdapter(LayoutInflater inflater, List<FriendDebts>friends, View.OnClickListener groch, AssetManager assets){
+    FriendEventAdapter(LayoutInflater inflater, List<String>friends, View.OnClickListener groch, AssetManager assets){
         this.friends = friends;
         this.clickListener = groch;
         this.inflater = inflater;
@@ -71,8 +71,7 @@ public class FriendEventAdapter extends RecyclerView.Adapter<FriendEventAdapter.
 
     @Override
     public void onBindViewHolder(FriendEventAdapter.FriendViewHolder friendViewHolder, int i) {
-        friendViewHolder.amount.setText("" + friends.get(i).getAmount() + "€");
-        friendViewHolder.date.setText("" + friends.get(i).getDate());
+        friendViewHolder.amount.setText(friends.get(i));
     }
 
     @Override

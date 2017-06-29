@@ -38,6 +38,7 @@ public class Group extends AppCompatActivity {
     private RecyclerView list;
     private ArrayList<Event> items;
     private State state;
+    private GroupDetails groupName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -64,6 +65,7 @@ public class Group extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent addDebt = new Intent(Group.this,AddGroupDebt.class);
+                addDebt.putExtra("group",groupName);
                 startActivityForResult(addDebt,0);
             }
         });
@@ -128,7 +130,8 @@ public class Group extends AppCompatActivity {
     private void fillItems(){
         items = new ArrayList<>();
         Bundle bundle = getIntent().getExtras();
-        state = (State) bundle.get("state");
+        groupName = (GroupDetails) bundle.get("group");
+        state = (State) getApplicationContext();
 
     }
 

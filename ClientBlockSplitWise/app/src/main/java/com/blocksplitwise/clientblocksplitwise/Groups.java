@@ -58,6 +58,7 @@ public class Groups extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent addGroup = new Intent(Groups.this,GroupAdd.class);
+                addGroup.putExtra("state",state);
                 startActivityForResult(addGroup,0);
             }
         });
@@ -123,8 +124,7 @@ public class Groups extends AppCompatActivity {
         //Query the server for the group information
         //Initialize the List With The group details
         groupsIDs = new ArrayList<>();
-        Bundle bundle = getIntent().getExtras();
-        state = (State) bundle.get("state");
+        state = (State) getApplicationContext();
         /*groups.add(new GroupDetails("General Expenses1", "This is just a group", R.mipmap.ic_money));
         groups.add(new GroupDetails("General Expenses2", "This is just a group", R.mipmap.ic_money));
         groups.add(new GroupDetails("House Expenses1", "This is another group", R.mipmap.ic_house));
@@ -152,8 +152,7 @@ public class Groups extends AppCompatActivity {
             int itemPosition = recyclerView.getChildLayoutPosition(view);
             GroupDetails item = state.getGroupPosition(itemPosition);
             Intent goToGroupDetails = new Intent(Groups.this, Group.class);
-            goToGroupDetails.putExtra("GroupValue", item);
-            goToGroupDetails.putExtra("state",state);
+            goToGroupDetails.putExtra("group", item);
             startActivityForResult(goToGroupDetails, 1);
         }
     }
