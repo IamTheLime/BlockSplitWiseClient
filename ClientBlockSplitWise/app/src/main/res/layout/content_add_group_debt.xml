@@ -136,6 +136,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
+                android:hint="Percentage"
                 android:layout_toEndOf="@id/userPicker"
                 android:inputType="numberDecimal">
 
@@ -143,7 +144,6 @@
                     android:id="@+id/percentage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Percentage"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
 

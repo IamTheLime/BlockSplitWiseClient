@@ -9,7 +9,9 @@ import java.util.ArrayList;
 public class GroupDetails implements Serializable {
     private String groupName;
     private String groupInfo;
+    private String id;
     private ArrayList<String> members;
+    private ArrayList<Transaction> transactions = new ArrayList<>();
     private int photoId;
 
     public String getGroupName() {
@@ -48,9 +50,10 @@ public class GroupDetails implements Serializable {
         return res;
     }
 
-    public GroupDetails (String name, String groupInfo, int photoId) {
+    public GroupDetails(String name, String groupInfo, String id, int photoId) {
         this.groupName = name;
         this.groupInfo = groupInfo;
+        this.id = id;
         this.photoId = photoId;
         this.members = new ArrayList<>();
     }
@@ -58,13 +61,25 @@ public class GroupDetails implements Serializable {
     public GroupDetails(GroupDetails gd) {
         this.groupName = gd.getGroupName();
         this.groupInfo = gd.getGroupInfo();
+        this.id = gd.getId();
         this.photoId = gd.getPhotoId();
         this.members = gd.getMembers();
+    }
+
+    public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, String id, int photoId) {
+        this.groupName = groupName;
+        this.groupInfo = groupInfo;
+        this.id = id;
+        this.photoId = photoId;
+        this.members = new ArrayList<>();
+        for (String s: members)
+            this.members.add(s);
     }
 
     public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, int photoId) {
         this.groupName = groupName;
         this.groupInfo = groupInfo;
+        this.id = "0";
         this.photoId = photoId;
         this.members = new ArrayList<>();
         for (String s: members)
@@ -73,5 +88,19 @@ public class GroupDetails implements Serializable {
 
     public GroupDetails clone() {
         return new GroupDetails(this);
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public void addTransaction(Transaction ts) {this.transactions.add(ts);}
+
+    public String getId() {
+        return id;
     }
 }

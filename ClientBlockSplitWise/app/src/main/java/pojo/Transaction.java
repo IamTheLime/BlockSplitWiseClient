@@ -1,34 +1,43 @@
 package pojo;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by rui on 29/06/2017.
  */
 
-public class Transaction {
+public class Transaction implements Serializable {
 
-    private int value;
-    private String user;
+    private ArrayList<String> user;
+    private ArrayList<Float> values;
     private String fromUser;
     private String group;
     private String tstamp;
     private String message;
     private String checksum;
 
-    public Transaction(int value, String user, String fromUser, String group, String tstamp, String message, String checksum) {
-        this.value = value;
+    public Transaction(ArrayList<String> user, ArrayList<Float> values, String fromUser, String group, String message, String checksum) {
         this.user = user;
+        this.values = values;
         this.fromUser = fromUser;
         this.group = group;
-        this.tstamp = tstamp;
+        this.tstamp = "" + System.currentTimeMillis() + "s";
         this.message = message;
         this.checksum = checksum;
     }
 
-    public int getValue() {
-        return value;
+    public Transaction(ArrayList<String> user, ArrayList<Float> values, String fromUser, String group,String message) {
+        this.user = user;
+        this.values = values;
+        this.fromUser = fromUser;
+        this.group = group;
+        this.tstamp = "" + System.currentTimeMillis() + "s";
+        this.message = message;
     }
 
-    public String getUser() {
+    public ArrayList<String> getUser() {
         return user;
     }
 
@@ -50,5 +59,23 @@ public class Transaction {
 
     public String getChecksum() {
         return checksum;
+    }
+
+    public ArrayList<Float> getValues() {
+        return values;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Transaction{");
+        sb.append("user=").append(user);
+        sb.append(", values=").append(values);
+        sb.append(", fromUser='").append(fromUser).append('\'');
+        sb.append(", group='").append(group).append('\'');
+        sb.append(", tstamp='").append(tstamp).append('\'');
+        sb.append(", message='").append(message).append('\'');
+        sb.append(", checksum='").append(checksum).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

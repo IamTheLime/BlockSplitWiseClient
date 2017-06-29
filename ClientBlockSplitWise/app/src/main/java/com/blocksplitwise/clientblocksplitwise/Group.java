@@ -33,8 +33,10 @@ import java.util.ArrayList;
 import pojo.FriendDebts;
 import pojo.GroupDetails;
 import pojo.State;
+import pojo.Transaction;
 
 public class Group extends AppCompatActivity {
+    private int index;
     private RecyclerView list;
     private ArrayList<Event> items;
     private State state;
@@ -66,6 +68,7 @@ public class Group extends AppCompatActivity {
             public void onClick(View view) {
                 Intent addDebt = new Intent(Group.this,AddGroupDebt.class);
                 addDebt.putExtra("group",groupName);
+                addDebt.putExtra("index",index);
                 startActivityForResult(addDebt,0);
             }
         });
@@ -84,7 +87,7 @@ public class Group extends AppCompatActivity {
         list.setLayoutManager(llm);
         fillItems();
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), items, new EventClickHandler(),getAssets()));
+        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets()));
         CircularImageView iv = (CircularImageView) findViewById(R.id.group_logo);
         iv.setImageResource(R.mipmap.ic_launcher);
         iv.setElevation(60);
@@ -94,7 +97,7 @@ public class Group extends AppCompatActivity {
         initfonts();
     }
 
-    /* ---------> Handler de criar uma nova divida para o grupo <--------
+    // ---------> Handler de criar uma nova divida para o grupo <--------
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (requestCode == 0) {
@@ -102,20 +105,14 @@ public class Group extends AppCompatActivity {
                 FriendDebts myValue = (FriendDebts) data.getSerializableExtra("debt");
                 // use 'myValue' return value here
                 if(myValue!=null) {
-                    //Ver se foi para pagar ou receber
-                    if(myValue.isDebt())
-                        debt -= myValue.getAmount();
-                    else
-                        debt += myValue.getAmount();
-                    // Adicionar as dividas
-                    items.add(myValue);
-                    recyclerView.setAdapter(new FriendEventAdapter(LayoutInflater.from(this),friends,new Friend.RecyclerOnClickHandler(),getAssets()));
+                    state = (State) getApplicationContext();
+                    list.setAdapter(new EventsAdapter(LayoutInflater.from(this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets()));
                 }
             }
         }
 
 
-    }*/
+    }
 
 
     private void initfonts(){
@@ -131,6 +128,7 @@ public class Group extends AppCompatActivity {
         items = new ArrayList<>();
         Bundle bundle = getIntent().getExtras();
         groupName = (GroupDetails) bundle.get("group");
+        index = bundle.getInt("index");
         state = (State) getApplicationContext();
 
     }
@@ -139,7 +137,7 @@ public class Group extends AppCompatActivity {
         @Override
         public void onClick(final View view) {
             int itemPosition = list.getChildLayoutPosition(view);
-            Event event = items.get(itemPosition);
+            Transaction event = state.getGroupPosition(index).getTransactions().get(itemPosition);
             Toast.makeText(Group.this, event.toString(), Toast.LENGTH_SHORT).show();
            // Intent goToGroupDetails = new Intent(Group.this,Group.class);
             //goToGroupDetails.putExtra("GroupValue",item);
@@ -153,7 +151,6 @@ public class Group extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("state",state);
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
         return true;

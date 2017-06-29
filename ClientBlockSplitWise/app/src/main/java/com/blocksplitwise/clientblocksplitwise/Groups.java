@@ -153,6 +153,7 @@ public class Groups extends AppCompatActivity {
             GroupDetails item = state.getGroupPosition(itemPosition);
             Intent goToGroupDetails = new Intent(Groups.this, Group.class);
             goToGroupDetails.putExtra("group", item);
+            goToGroupDetails.putExtra("index", itemPosition);
             startActivityForResult(goToGroupDetails, 1);
         }
     }

@@ -30,7 +30,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import pojo.FriendInfo;
 import pojo.GroupDetails;
 import pojo.State;
 
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         String loginInfo = bundle.getString("Login");
         //state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
         state.setUserName(loginInfo);
-        Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this,state.toString(),Toast.LENGTH_SHORT).show();
         MainActivity.GroupRegisterer gr = new MainActivity.GroupRegisterer();
         try {
             gr.execute(loginInfo).get();
@@ -258,7 +257,7 @@ public class MainActivity extends AppCompatActivity
                 for(String s: groupsIDs) {
                     MainActivity.GetGroups gg = new MainActivity.GetGroups();
                     try {
-                        gg.execute("rui", s).get();
+                        gg.execute(state.getUserName(), s).get();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -363,10 +362,13 @@ public class MainActivity extends AppCompatActivity
 
                 String gname = null;
                 String desc = null;
+                String id = null;
                 ArrayList<String> members = null;
                 try {
                     gname = jObj.getString("name");
                     desc = jObj.getString("desc");
+                    id = jObj.getString("ident");
+
                     members = new ArrayList<>();
 
                     for (int i = 0; i < jArr.length();i++) {
@@ -375,7 +377,7 @@ public class MainActivity extends AppCompatActivity
 
                     GroupDetails gd;
 
-                    gd = new GroupDetails(gname,desc,members,R.mipmap.ic_money);
+                    gd = new GroupDetails(gname,desc,members, id, R.mipmap.ic_money);
                     state.addGroup(gd);
                 } catch (JSONException e) {
                     e.printStackTrace();

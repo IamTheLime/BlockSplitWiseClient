@@ -13,22 +13,17 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -301,12 +296,13 @@ public class GroupAdd extends AppCompatActivity {
 
             if(aBoolean==true){
 
-                GroupDetails gd = new GroupDetails(groupName,description,members,R.mipmap.ic_money);
+                GroupDetails gd = new GroupDetails(groupName,description,members, R.mipmap.ic_money);
 
                 System.out.println(gd.toString());
 
                 Intent intent = getIntent();
                 intent.putExtra("group",gd);
+                state.addGroup(gd);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
