@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -87,9 +86,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         Bundle bundle = getIntent().getExtras();
         String loginInfo = bundle.getString("Login");
-        state = (State) bundle.get("state");
-        if(state==null)
-            state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
+        state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
         MainActivity.GroupRegisterer gr = new MainActivity.GroupRegisterer();
         try {
             gr.execute(loginInfo).get();
@@ -128,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.friends) {
             Intent goToFriends = new Intent(this,Friends.class);
+            goToFriends.putExtra("state",state);
             startActivityForResult(goToFriends,0);
         } else if (id == R.id.groups) {
             Intent goToGroups = new Intent(this,Groups.class);
@@ -152,6 +150,9 @@ public class MainActivity extends AppCompatActivity
         // Make sure the request was successful
         if (resultCode == RESULT_OK) {
             //There are no intent with data
+            Bundle bundle = getIntent().getExtras();
+            /*state = (State) bundle.get("state");
+            Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();*/
         }
         if (resultCode == RESULT_CANCELED){
             //Just do nothing
@@ -292,7 +293,6 @@ public class MainActivity extends AppCompatActivity
         * */
         @Override
         protected Boolean doInBackground(final String... params) {
-            System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Im here");
             user = params[0];
             groupID = params[1];
             URL myEndpoint = null;

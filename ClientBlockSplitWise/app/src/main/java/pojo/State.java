@@ -49,4 +49,14 @@ public class State implements Serializable{
     public String getUserName() {
         return userName;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("State{");
+        sb.append("userName='").append(userName).append('\'');
+        sb.append(", friends=").append(friends);
+        sb.append(", groups=").append(groups);
+        sb.append('}');
+        return sb.toString();
+    }
 }
