@@ -76,6 +76,22 @@ public class GroupDetails implements Serializable {
             this.members.add(s);
     }
 
+
+
+    public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, ArrayList<Transaction> transactions, String id, int photoId) {
+        this.groupName = groupName;
+        this.groupInfo = groupInfo;
+        this.id = id;
+        this.photoId = photoId;
+        this.members = new ArrayList<>();
+        for (String s: members)
+            this.members.add(s);
+
+        this.transactions = new ArrayList<>();
+        for (Transaction t: transactions)
+            this.transactions.add(t);
+    }
+
     public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, int photoId) {
         this.groupName = groupName;
         this.groupInfo = groupInfo;
@@ -102,5 +118,18 @@ public class GroupDetails implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GroupDetails{");
+        sb.append("groupName='").append(groupName).append('\'');
+        sb.append(", groupInfo='").append(groupInfo).append('\'');
+        sb.append(", id='").append(id).append('\'');
+        sb.append(", members=").append(members);
+        sb.append(", transactions=").append(transactions);
+        sb.append(", photoId=").append(photoId);
+        sb.append('}');
+        return sb.toString();
     }
 }

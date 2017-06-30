@@ -31,7 +31,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="amount">Amount</string>
-    <string name="connection">192.168.1.3</string>
+    <string name="connection">192.168.1.2</string>
 
     <string-array name="debts_options">
         <item>SPLIT DEBT EQUALLY AMONGST MEMBERS</item>

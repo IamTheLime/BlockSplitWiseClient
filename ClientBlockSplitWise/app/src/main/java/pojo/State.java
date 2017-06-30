@@ -15,20 +15,17 @@ public class State extends Application implements Serializable{
     private String userName;
     private List<FriendInfo> friends;
     private List<GroupDetails> groups;
-    private List<Transaction> transactions = new ArrayList<>();
 
     public State() {
         userName = null;
         friends = new ArrayList<>();
         groups = new ArrayList<>();
-        transactions = new ArrayList<>();
     }
 
     public State(String userName, List<FriendInfo> friends, List<GroupDetails> groups, List<Transaction> transactions) {
         this.userName = userName;
         this.friends = friends;
         this.groups = groups;
-        this.transactions = transactions;
     }
 
     public List<FriendInfo> getFriends() {
@@ -45,19 +42,23 @@ public class State extends Application implements Serializable{
         return res;
     }
 
+    public int groupIndex(GroupDetails gd) {
+        return groups.indexOf(gd);
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void addGroup(GroupDetails gd) {
+    public synchronized void addGroup(GroupDetails gd) {
         groups.add(gd);
     }
 
-    public void addFriend(FriendInfo fi) {
+    public synchronized void addFriend(FriendInfo fi) {
         friends.add(fi);
     }
 
-    public void addTransaction(int gd, Transaction ts) {
+    public synchronized void addTransaction(int gd, Transaction ts) {
         GroupDetails aux = groups.get(gd);
         aux.addTransaction(ts);
     }
@@ -78,9 +79,5 @@ public class State extends Application implements Serializable{
         sb.append(", groups=").append(groups);
         sb.append('}');
         return sb.toString();
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
     }
 }

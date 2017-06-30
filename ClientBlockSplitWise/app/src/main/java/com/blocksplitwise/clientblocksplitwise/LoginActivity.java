@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -37,6 +38,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Authenticator;
@@ -50,6 +57,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import pojo.FriendInfo;
+import pojo.State;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -78,11 +88,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private State state;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        state = (State) getApplicationContext();
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
@@ -396,6 +409,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private class Authorize extends AsyncTask<String,Void,Boolean>{
         private String email;
         private String password;
+        BufferedReader inHttp = null;
         @Override
         protected Boolean doInBackground(final String... params) {
             URL myEndpoint = null;
@@ -430,6 +444,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             return new PasswordAuthentication(params[0],params[1].toCharArray());
                         }
                     });
+
+                    try {
+                        inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     return true;
 
                 }
@@ -449,9 +469,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             super.onProgressUpdate(values);
         }
 
+    private void getFriends() {
+
+        String body = null;
+        try {
+            body = inHttp.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject jObj =null;
+        JSONArray jArr = null;
+
+        try {
+            jObj = new JSONObject(body);
+            jArr = jObj.getJSONArray("flist");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i < jArr.length(); i++) {
+            try {
+                String friend = (String) jArr.get(i);
+                FriendInfo fi = new FriendInfo(friend,R.drawable.ic_menu_friends);
+                state.addFriend(fi);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean==true){
+                getFriends();
                 Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
                 goToMain.putExtra("Login",email);
                 startActivity(goToMain);

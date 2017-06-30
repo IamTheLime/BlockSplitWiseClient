@@ -475,12 +475,12 @@ public class AddGroupDebt extends AppCompatActivity {
 
             if(aBoolean==true){
 
+                state.addTransaction(index,ts);
                 Intent intent = getIntent();
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
             else{
-                state.addTransaction(index,ts);
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED,returnIntent);
                 finish();

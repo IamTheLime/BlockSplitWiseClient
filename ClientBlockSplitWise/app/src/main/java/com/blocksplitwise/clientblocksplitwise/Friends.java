@@ -24,10 +24,12 @@ import java.util.List;
 
 import pojo.FriendDetailsGroupAdd;
 import pojo.FriendInfo;
+import pojo.State;
 
 public class Friends extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<FriendInfo> friends;
+    private State state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +51,6 @@ public class Friends extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.toolbar).setPadding(0,50,0,0);
 
-
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +70,7 @@ public class Friends extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
         // This is Just for Test
         initializeData();
+        recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this), state.getFriends(), new Friends.RecyclerOnClickHandler(), getAssets()));
 
         //EXTRAS
         //initfonts();
@@ -84,8 +84,9 @@ public class Friends extends AppCompatActivity {
                 String myValue = data.getStringExtra("friend");
                 // use 'myValue' return value here
                 if(myValue!=null) {
-                    friends.add(new FriendInfo(myValue,R.mipmap.ic_costanza));
-                    recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this), friends, new Friends.RecyclerOnClickHandler(), getAssets()));
+                    //friends.add(new FriendInfo(myValue,R.mipmap.ic_costanza));
+                    friends = state.getFriends();
+                    recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this), state.getFriends(), new Friends.RecyclerOnClickHandler(), getAssets()));
                 }
             }
         }
@@ -104,6 +105,8 @@ public class Friends extends AppCompatActivity {
         //Query the server for the group information
         //Initialize the List With The group details
         friends = new ArrayList<>();
+        state = (State) getApplicationContext();
+        friends = state.getFriends();
 
     }
 

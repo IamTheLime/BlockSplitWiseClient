@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 
 import pojo.GroupDetails;
 import pojo.State;
+import pojo.Transaction;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -88,8 +88,7 @@ public class MainActivity extends AppCompatActivity
         String loginInfo = bundle.getString("Login");
         //state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
         state.setUserName(loginInfo);
-        Toast.makeText(MainActivity.this,state.toString(),Toast.LENGTH_SHORT).show();
-        MainActivity.GroupRegisterer gr = new MainActivity.GroupRegisterer();
+        MainActivity.GetGroups gr = new MainActivity.GetGroups();
         try {
             gr.execute(loginInfo).get();
         } catch (InterruptedException e) {
@@ -150,16 +149,17 @@ public class MainActivity extends AppCompatActivity
         // Make sure the request was successful
         if (resultCode == RESULT_OK) {
             //There are no intent with data
-            Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();
         }
         if (resultCode == RESULT_CANCELED){
             //Just do nothing
-            Toast.makeText(MainActivity.this,"YOLO : " + state.toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
+    public interface AsyncResponse {
+        void processFinish(Transaction output, int pos);
+    }
 
-    private class GroupRegisterer extends AsyncTask<String,Void,Boolean> {
+    private class GetGroups extends AsyncTask<String,Void,Boolean> {
         private String user;
         private String password;
         BufferedReader inHttp = null;
@@ -228,18 +228,18 @@ public class MainActivity extends AppCompatActivity
             }
 
             JSONObject jObj =null;
-            JSONArray jArr = null;
+            JSONArray jArrMembers = null;
 
             try {
                 jObj = new JSONObject(body);
-                jArr = jObj.getJSONArray("groups");
+                jArrMembers = jObj.getJSONArray("groups");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            for(int i = 0; i < jArr.length(); i++) {
+            for(int i = 0; i < jArrMembers.length(); i++) {
                 try {
-                    String group = (String) jArr.get(i);
+                    String group = (String) jArrMembers.get(i);
                     res.add(group);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 for(String s: groupsIDs) {
-                    MainActivity.GetGroups gg = new MainActivity.GetGroups();
+                    MainActivity.GetGroup gg = new MainActivity.GetGroup();
                     try {
                         gg.execute(state.getUserName(), s).get();
                     } catch (InterruptedException e) {
@@ -264,11 +264,6 @@ public class MainActivity extends AppCompatActivity
                         e.printStackTrace();
                     }
                 }
-
-                /*for(String s: ids) {
-                    groups.add(getGroupById(s));
-                }
-                if(groups.size()!=0)recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(Groups.this),groups,new GroupRecyclerOnClickHandler(),getAssets()));*/
 
                 return;
             }
@@ -281,10 +276,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class GetGroups extends AsyncTask<String,Void,Boolean> {
+    private class GetGroup extends AsyncTask<String,Void,Boolean>{
         private String user;
         private String groupID;
         private HttpURLConnection myConnection;
+        private Transaction transaction;
         /*
         * params[0] - user
         * params[1] - groupid
@@ -351,11 +347,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 JSONObject jObj =null;
-                JSONArray jArr = null;
+                JSONArray jArrMembers = null;
+                JSONArray jArrTrans = null;
 
                 try {
                     jObj = new JSONObject(body);
-                    jArr = jObj.getJSONArray("users");
+                    jArrMembers = jObj.getJSONArray("users");
+                    jArrTrans = jObj.getJSONArray("transactions");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -371,14 +369,148 @@ public class MainActivity extends AppCompatActivity
 
                     members = new ArrayList<>();
 
-                    for (int i = 0; i < jArr.length();i++) {
-                        members.add((String) jArr.get(i));
+                    for (int i = 0; i < jArrMembers.length();i++) {
+                        members.add((String) jArrMembers.get(i));
                     }
 
                     GroupDetails gd;
-
-                    gd = new GroupDetails(gname,desc,members, id, R.mipmap.ic_money);
+                    gd = new GroupDetails(gname,desc,members,id,R.mipmap.ic_money);
                     state.addGroup(gd);
+
+                    int pos = state.groupIndex(gd);
+
+                    ArrayList<Transaction> ts = new ArrayList<>();
+
+
+                    for (int i = 0; i < jArrTrans.length();i++) {
+                        GetTransactions gt = new GetTransactions();
+                        gt.execute((String) jArrTrans.get(i), ""+pos).get();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+
+                return;
+            }
+            else{
+                /*Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+                finish();
+                return;*/
+            }
+        }
+    }
+
+
+    private class GetTransactions extends AsyncTask<String,Void,Boolean> {
+        private String transId;
+        private int groupId;
+        private HttpURLConnection myConnection;
+        /*
+        * params[0] - user
+        * params[1] - groupid
+        * */
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            transId = params[0];
+            groupId = Integer.parseInt(params[1]);
+            URL myEndpoint = null;
+            try {
+                myEndpoint = new URL("http://"+getResources().getString(R.string.connection)+":9000/transactions/"+transId);}
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+            // Create connection
+            myConnection = null;
+            try{
+                myConnection =
+                        (HttpURLConnection) myEndpoint.openConnection();
+            }
+            catch (Exception e){
+                e.printStackTrace();}
+
+            // Enable writing
+            // Enable writing
+            try{
+                myConnection.setRequestMethod("GET");
+
+                if (myConnection.getResponseCode() == 200) {
+                    return true;
+
+                }
+                else{
+                    System.out.println(myConnection.getResponseMessage());
+                    return false;
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+
+            if(aBoolean==true){
+                BufferedReader inHttp = null;
+                try {
+                    inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String body = null;
+                try {
+                    body = inHttp.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                JSONObject jObj =null;
+                JSONArray jArrVAlues = null;
+
+                try {
+                    jObj = new JSONObject(body);
+                    jArrVAlues = jObj.getJSONArray("value");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String gname = null;
+                String desc = null;
+                String id = null;
+                String fromUser = null;
+                String timestamp = null;
+                ArrayList<String> users = new ArrayList<>();
+                ArrayList<Float> values = new ArrayList<>();
+                try {
+                    gname = jObj.getString("group");
+                    desc = jObj.getString("message");
+                    id = jObj.getString("chksum");
+                    fromUser = jObj.getString("fromUser");
+                    timestamp = jObj.getString("tstamp");
+
+                    for(int i = 0; i < jArrVAlues.length(); i++){
+                        JSONObject temp = jArrVAlues.getJSONObject(i);
+                        users.add(temp.getString("person"));
+                        values.add((float) temp.getDouble("amount"));
+                    }
+
+                    Transaction res = new Transaction(users,values,fromUser,gname,desc,id);
+                    state.addTransaction(groupId,res);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
