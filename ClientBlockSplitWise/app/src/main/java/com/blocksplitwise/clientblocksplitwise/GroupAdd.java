@@ -142,7 +142,7 @@ public class GroupAdd extends AppCompatActivity {
                     sFriends = sFriends + ",\"" + f.getFriendName() + "\"";
 
                 }
-                gr.execute("rui","1234",gName,selected,sFriends);
+                gr.execute(state.getUserName(),gName,selected,sFriends);
             }
         });
         addFriend.setOnClickListener(new View.OnClickListener() {
@@ -236,10 +236,9 @@ public class GroupAdd extends AppCompatActivity {
         protected Boolean doInBackground(final String... params) {
             URL myEndpoint = null;
             username = params[0];
-            password = params[1];
-            groupName = params[2];
-            description = params[3];
-            gMembers = params[4];
+            groupName = params[1];
+            description = params[2];
+            gMembers = params[3];
             members = new ArrayList<>();
             try {
                 myEndpoint = new URL("http://"+getString(R.string.connection)+":9000/groupreg");}
@@ -302,7 +301,6 @@ public class GroupAdd extends AppCompatActivity {
 
                 Intent intent = getIntent();
                 intent.putExtra("group",gd);
-                state.addGroup(gd);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }

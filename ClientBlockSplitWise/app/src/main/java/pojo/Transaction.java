@@ -18,12 +18,12 @@ public class Transaction implements Serializable {
     private String message;
     private String checksum;
 
-    public Transaction(ArrayList<String> user, ArrayList<Float> values, String fromUser, String group, String message, String checksum) {
+    public Transaction(ArrayList<String> user, ArrayList<Float> values, String fromUser, String group, String message, String checksum, String timestamp) {
         this.user = user;
         this.values = values;
         this.fromUser = fromUser;
         this.group = group;
-        this.tstamp = "" + System.currentTimeMillis() + "s";
+        this.tstamp = timestamp;
         this.message = message;
         this.checksum = checksum;
     }

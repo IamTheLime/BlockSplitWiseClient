@@ -177,8 +177,13 @@ public class AddGroupDebt extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(amount.getText().toString().equals("") || !isFloat(amount.getText().toString())) {
-                    Snackbar.make(recyclerView, "Amount:Please insert a decimal number", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    final Snackbar snackbar  = Snackbar.make(recyclerView, "Amount:Please insert a decimal number", Snackbar.LENGTH_LONG);
+                            snackbar.setAction("Close", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    snackbar.dismiss();
+                                }
+                            }).show();
                     return;
                 }
                 String input = editText.getText().toString();
@@ -474,8 +479,6 @@ public class AddGroupDebt extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
 
             if(aBoolean==true){
-
-                state.addTransaction(index,ts);
                 Intent intent = getIntent();
                 setResult(Activity.RESULT_OK, intent);
                 finish();

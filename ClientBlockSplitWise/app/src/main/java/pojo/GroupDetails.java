@@ -2,6 +2,7 @@ package pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Tiago-DESKTOP-WIN-PC on 17/05/13.
@@ -13,6 +14,7 @@ public class GroupDetails implements Serializable {
     private ArrayList<String> members;
     private ArrayList<Transaction> transactions = new ArrayList<>();
     private int photoId;
+    private String tstamp;
 
     public String getGroupName() {
         return groupName;
@@ -66,11 +68,12 @@ public class GroupDetails implements Serializable {
         this.members = gd.getMembers();
     }
 
-    public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, String id, int photoId) {
+    public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, String id, int photoId, String tstamp) {
         this.groupName = groupName;
         this.groupInfo = groupInfo;
         this.id = id;
         this.photoId = photoId;
+        this.tstamp = tstamp;
         this.members = new ArrayList<>();
         for (String s: members)
             this.members.add(s);
@@ -114,6 +117,8 @@ public class GroupDetails implements Serializable {
         this.transactions = transactions;
     }
 
+    public void addTransaction(Transaction ts, int x) {this.transactions.add(x,ts);}
+
     public void addTransaction(Transaction ts) {this.transactions.add(ts);}
 
     public String getId() {
@@ -131,5 +136,32 @@ public class GroupDetails implements Serializable {
         sb.append(", photoId=").append(photoId);
         sb.append('}');
         return sb.toString();
+    }
+
+    public String getTstamp() {
+        return tstamp;
+    }
+
+    public void setTstamp(String tstamp) {
+        this.tstamp = tstamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroupDetails that = (GroupDetails) o;
+        return photoId == that.photoId &&
+                Objects.equals(groupName, that.groupName) &&
+                Objects.equals(groupInfo, that.groupInfo) &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(members, that.members) &&
+                Objects.equals(transactions, that.transactions) &&
+                Objects.equals(tstamp, that.tstamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(groupName, groupInfo, id, members, transactions, photoId, tstamp);
     }
 }

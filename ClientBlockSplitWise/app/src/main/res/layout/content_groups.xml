@@ -66,22 +66,7 @@
              app:civ_shadow="true"
              app:civ_shadow_color="@color/primaryDark"
              app:civ_shadow_radius="10"/>
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:elevation="5dp"
-            android:background="@android:color/transparent"
-            android:foreground="?android:selectableItemBackground"
-            android:clickable="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="10dp"
-            app:srcCompat="@drawable/ic_arrow_drop_down_black_24dp"
-
-            />
-         </RelativeLayout>
+     </RelativeLayout>
          <include
             android:id="@+id/include"
             layout="@layout/recycler_view"

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.alorma.timeline.RoundTimelineView;
 import com.alorma.timeline.TimelineView;
 
+import java.util.Date;
 import java.util.List;
 
 import pojo.Transaction;
@@ -43,12 +44,13 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolderItem> {
     @Override
     public void onBindViewHolder(ViewHolderItem holder, int position) {
         Transaction event = events.get(position);
-        holder.test1.setText(event.getFromUser());
+        holder.test1.setText(event.getFromUser() + "\n" +(new Date(Long.parseLong(event.getTstamp().replaceAll("s","")))).toString());
+        holder.test1.setTextSize(10);
         holder.test2.setText("" + event.getValues().get(0));
         holder.test3.setImageResource(R.drawable.ic_menu_groups);
         if(position == 0)
             holder.timeline.setTimelineType(TimelineView.TYPE_START);
-        else if (position == events.size())
+        else if (position == events.size() -1 )
             holder.timeline.setTimelineType(RoundTimelineView.TYPE_END);
         else holder.timeline.setTimelineType(RoundTimelineView.TYPE_MIDDLE);
         holder.timeline.setTimelineAlignment(TimelineView.ALIGNMENT_DEFAULT);

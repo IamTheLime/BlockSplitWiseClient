@@ -89,13 +89,7 @@ public class MainActivity extends AppCompatActivity
         //state = new State(loginInfo, new ArrayList<FriendInfo>(), new ArrayList<GroupDetails>());
         state.setUserName(loginInfo);
         MainActivity.GetGroups gr = new MainActivity.GetGroups();
-        try {
-            gr.execute(loginInfo).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+            gr.execute(loginInfo);
         ((TextView) findViewById(R.id.navbarTitle)).setText("BlockSplitwise Client");
         ((TextView) findViewById(R.id.textView)).setText(loginInfo);
         return true;
@@ -336,14 +330,16 @@ public class MainActivity extends AppCompatActivity
                 try {
                     inHttp = new BufferedReader(new InputStreamReader(myConnection.getInputStream()));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("ALguma cena " + e.getMessage());
+                    //e.printStackTrace();
                 }
 
                 String body = null;
                 try {
                     body = inHttp.readLine();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("ALguma cena " + e.getMessage());
+                    //e.printStackTrace();
                 }
 
                 JSONObject jObj =null;
@@ -361,11 +357,13 @@ public class MainActivity extends AppCompatActivity
                 String gname = null;
                 String desc = null;
                 String id = null;
+                String tstamp = null;
                 ArrayList<String> members = null;
                 try {
                     gname = jObj.getString("name");
                     desc = jObj.getString("desc");
                     id = jObj.getString("ident");
+                    tstamp = jObj.getString("bstamp");
 
                     members = new ArrayList<>();
 
@@ -374,7 +372,7 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     GroupDetails gd;
-                    gd = new GroupDetails(gname,desc,members,id,R.mipmap.ic_money);
+                    gd = new GroupDetails(gname,desc,members,id,R.mipmap.ic_money,tstamp);
                     state.addGroup(gd);
 
                     int pos = state.groupIndex(gd);
@@ -507,7 +505,7 @@ public class MainActivity extends AppCompatActivity
                         values.add((float) temp.getDouble("amount"));
                     }
 
-                    Transaction res = new Transaction(users,values,fromUser,gname,desc,id);
+                    Transaction res = new Transaction(users,values,fromUser,gname,desc,id,timestamp);
                     state.addTransaction(groupId,res);
 
 

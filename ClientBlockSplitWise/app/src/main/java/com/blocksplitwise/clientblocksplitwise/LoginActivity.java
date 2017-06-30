@@ -480,10 +480,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         JSONObject jObj =null;
         JSONArray jArr = null;
+        String bstamp = null;
 
         try {
             jObj = new JSONObject(body);
             jArr = jObj.getJSONArray("flist");
+            bstamp = jObj.getString("bstamp");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -497,6 +499,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 e.printStackTrace();
             }
         }
+        state.setUserTs(bstamp);
     }
 
         @Override
