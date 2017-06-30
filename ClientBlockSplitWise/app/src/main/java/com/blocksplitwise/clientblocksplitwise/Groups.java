@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,11 +53,12 @@ public class Groups extends AppCompatActivity {
 
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         Groups.UpdateGRoups ug = new Groups.UpdateGRoups();
         try {
             ug.execute(state.getUserName(),state.getUserTs()).get();
+            changeSettledText();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -131,7 +134,15 @@ public class Groups extends AppCompatActivity {
                 GroupDetails myValue = (GroupDetails) data.getSerializableExtra("group");
                 // use 'myValue' return value here
                 if(myValue!=null) {
-                    state.addGroup(myValue);
+                    Groups.UpdateGRoups ug = new Groups.UpdateGRoups();
+                    try {
+                        ug.execute(state.getUserName(),state.getUserTs()).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    //state.addGroup(myValue);
                     recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(Groups.this),state.getGroups(),new GroupRecyclerOnClickHandler(),getAssets()));
                 }
             }
@@ -543,6 +554,8 @@ public class Groups extends AppCompatActivity {
 
                     Transaction res = new Transaction(users,values,fromUser,gname,desc,id,timestamp);
                     state.addTransaction(groupId,res);
+                    recyclerView.setAdapter(new GroupsPreviewAdapter(LayoutInflater.from(Groups.this),state.getGroups(),new GroupRecyclerOnClickHandler(),getAssets()));
+                    changeSettledText();
 
 
                 } catch (JSONException e) {
@@ -561,19 +574,25 @@ public class Groups extends AppCompatActivity {
         }
     }
 
-    private float changeSettledText(){
+    private void changeSettledText(){
         float sum = 0.f;
         List<GroupDetails> groups = state.getGroups();
+        System.out.println("Inicio do calculo " + groups.size());
         for(GroupDetails g : groups){
-            for(Transaction t : g.getTransactions()){
+            System.out.println("Transacoes a fazer");
+            ArrayList<Transaction> ts = g.getTransactions();
+            System.out.println("Transacoes " + ts.size() + " " + sum);
+            for(Transaction t : ts){
                 ArrayList<String> users = t.getUser();
                 int index = users.indexOf(state.getUserName());
-                sum += t.getValues().get(index);
-                System.out.println("OLA " + sum);
-
+                if(index>=0)
+                    sum += t.getValues().get(index);
+                System.out.println("Calculo " + sum + " index " + t.getValues().get(index));
             }
         }
 
-        return sum;
+        tv3.setText(""+sum);
+
+        //return sum;
     }
 }

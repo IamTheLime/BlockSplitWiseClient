@@ -21,6 +21,7 @@ import pojo.Transaction;
 
 class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolderItem> {
 
+    private String name="";
     private final LayoutInflater inflater;
     private final List<Transaction> events;
     private  View.OnClickListener clickListener = null;
@@ -30,6 +31,14 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolderItem> {
         this.events = events;
         this.clickListener = clickListener;
         this.assets = assets;
+    }
+
+    EventsAdapter(LayoutInflater inflater, List<Transaction> events, View.OnClickListener clickListener, AssetManager assets, String name) {
+        this.inflater = inflater;
+        this.events = events;
+        this.clickListener = clickListener;
+        this.assets = assets;
+        this.name = name;
     }
 
     @Override
@@ -46,7 +55,13 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolderItem> {
         Transaction event = events.get(position);
         holder.test1.setText(event.getFromUser() + "\n" +(new Date(Long.parseLong(event.getTstamp().replaceAll("s","")))).toString());
         holder.test1.setTextSize(10);
-        holder.test2.setText("" + event.getValues().get(0));
+        if(!name.equals("")) {
+            int index = event.getUser().indexOf(name);
+            holder.test2.setText("" + event.getValues().get(index));
+        }
+        else {
+            holder.test2.setText("" + event.getValues().get(0));
+        }
         holder.test3.setImageResource(R.drawable.ic_menu_groups);
         if(position == 0)
             holder.timeline.setTimelineType(TimelineView.TYPE_START);

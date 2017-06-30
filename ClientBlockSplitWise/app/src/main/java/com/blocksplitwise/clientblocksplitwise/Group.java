@@ -41,6 +41,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import pojo.FriendDebts;
@@ -119,33 +120,24 @@ public class Group extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(this));
         orderTimestap();
         length = state.getGroupPosition(index).getTransactions().size();
-        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets()));
+        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets(),state.getUserName()));
         CircularImageView iv = (CircularImageView) findViewById(R.id.group_logo);
         iv.setImageResource(R.mipmap.ic_launcher);
         iv.setElevation(60);
-                //iv.setImageResource(R.mipmap.ic_launcher);
 
         //Extras
         initfonts();
     }
 
-    // ---------> Handler de criar uma nova divida para o grupo <--------
-    /*protected void onActivityResult(int requestCode, int resultCode,
+    protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                FriendDebts myValue = (FriendDebts) data.getSerializableExtra("debt");
-                // use 'myValue' return value here
-                if(myValue!=null) {
-                    state = (State) getApplicationContext();
-                    orderTimestap();
-                    list.setAdapter(new EventsAdapter(LayoutInflater.from(this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets()));
-                }
             }
         }
 
 
-    }*/
+    }
 
     private void orderTimestap() {
         Collections.sort(state.getGroupPosition(index).getTransactions(), new Comparator<Transaction>() {
@@ -172,7 +164,17 @@ public class Group extends AppCompatActivity {
         groupName = (GroupDetails) bundle.get("group");
         index = bundle.getInt("index");
         state = (State) getApplicationContext();
-
+        Button button1 = (Button) findViewById(R.id.settled);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToSettleDetails = new Intent(Group.this,SettleUp.class);
+                goToSettleDetails.putExtra("debt","" + getDebt());
+                goToSettleDetails.putExtra("group", groupName);
+                goToSettleDetails.putExtra("index", index);
+                startActivityForResult(goToSettleDetails,0);
+            }
+        });
     }
 
     protected class EventClickHandler implements RecyclerView.OnClickListener{
@@ -180,10 +182,9 @@ public class Group extends AppCompatActivity {
         public void onClick(final View view) {
             int itemPosition = list.getChildLayoutPosition(view);
             Transaction event = state.getGroupPosition(index).getTransactions().get(itemPosition);
-            Toast.makeText(Group.this, event.toString(), Toast.LENGTH_SHORT).show();
-           // Intent goToGroupDetails = new Intent(Group.this,Group.class);
+            //Intent goToGroupDetails = new Intent(Group.this,Group.class);
             //goToGroupDetails.putExtra("GroupValue",item);
-           // startActivityForResult(goToGroupDetails,0);
+            //startActivityForResult(goToGroupDetails,0);
         }
     }
 
@@ -293,7 +294,8 @@ public class Group extends AppCompatActivity {
                     System.out.println(bstamp + " dasngkjfdhgujiadhgjlkdaflkja ##" + tstamp);
                     if(Integer.parseInt(bstamp) <= Integer.parseInt(tstamp))
                         return;
-                    groupName.setTstamp(bstamp);
+                    state.setTimeGroup(index, "" +(Integer.parseInt(bstamp) + 1));
+                    groupName.setTstamp("" +Integer.parseInt(bstamp) + 1);
 
                     int pos = index;
 
@@ -427,7 +429,7 @@ public class Group extends AppCompatActivity {
 
                     Transaction res = new Transaction(users,values,fromUser,gname,desc,id,timestamp);
 
-                    state.addTransaction(groupId,length,res);
+                    state.addTransaction(groupId,res);
                     list.setAdapter(new EventsAdapter(LayoutInflater.from(Group.this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets()));
 
 
@@ -447,4 +449,17 @@ public class Group extends AppCompatActivity {
         }
     }
 
+
+    private float getDebt(){
+        float sum = 0.f;
+        ArrayList<Transaction> ts = groupName.getTransactions();
+        for(Transaction t : ts){
+            ArrayList<String> users = t.getUser();
+            int index = users.indexOf(state.getUserName());
+            if(index>=0)
+                sum += t.getValues().get(index);
+        }
+
+        return sum;
+    }
 }

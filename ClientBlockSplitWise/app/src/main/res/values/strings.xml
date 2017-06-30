@@ -38,4 +38,5 @@
         <item>YOU WILL PAY ALL THE DEBT</item>
         <item>SELECT MANUALLY ALL THE PERCENTAGES</item>
     </string-array>
+    <string name="title_activity_settle_up">SettleUp</string>
 </resources>

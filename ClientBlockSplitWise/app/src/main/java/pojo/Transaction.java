@@ -19,8 +19,12 @@ public class Transaction implements Serializable {
     private String checksum;
 
     public Transaction(ArrayList<String> user, ArrayList<Float> values, String fromUser, String group, String message, String checksum, String timestamp) {
-        this.user = user;
-        this.values = values;
+        this.user = new ArrayList<>();
+        for (String s:user)
+            this.user.add(s);
+        this.values = new ArrayList<>();
+        for (Float f: values)
+            this.values.add(f);
         this.fromUser = fromUser;
         this.group = group;
         this.tstamp = timestamp;
@@ -63,6 +67,10 @@ public class Transaction implements Serializable {
 
     public ArrayList<Float> getValues() {
         return values;
+    }
+
+    public Transaction clone() {
+        return new Transaction(user,values,fromUser,group,message,checksum,tstamp);
     }
 
     @Override

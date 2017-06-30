@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -146,6 +147,8 @@ public class MainActivity extends AppCompatActivity
         }
         if (resultCode == RESULT_CANCELED){
             //Just do nothing
+            Toast.makeText(MainActivity.this, "Item "+state.toString(),Toast.LENGTH_SHORT).show();
+            System.out.println(state.toString());
         }
     }
 

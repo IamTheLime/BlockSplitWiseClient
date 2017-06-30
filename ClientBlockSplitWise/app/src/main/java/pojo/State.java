@@ -60,11 +60,6 @@ public class State extends Application implements Serializable{
         friends.add(fi);
     }
 
-    public synchronized void addTransaction(int gd, int x, Transaction ts) {
-        GroupDetails aux = groups.get(gd);
-        aux.addTransaction(ts);
-    }
-
     public synchronized void addTransaction(int gd, Transaction ts) {
         GroupDetails aux = groups.get(gd);
         aux.addTransaction(ts);
@@ -76,6 +71,11 @@ public class State extends Application implements Serializable{
 
     public String getUserName() {
         return userName;
+    }
+
+    public void setTimeGroup (int index, String timestamp) {
+        GroupDetails gd = groups.get(index);
+        gd.setTstamp(timestamp);
     }
 
     @Override

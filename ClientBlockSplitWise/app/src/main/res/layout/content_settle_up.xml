@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.blocksplitwise.clientblocksplitwise.SettleUp"
+    tools:showIn="@layout/activity_settle_up">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/accent"
+            android:id="@+id/Relative1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEBT:"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textSize="20dp"
+                android:textColor="@color/textPrimary"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Relative1"
+            android:id="@+id/Relative2"
+            android:background="@color/primaryDark"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/money"
+                android:text="00.00"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textSize="20dp"
+                android:textColor="@color/textPrimary"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/Relative2"
+            android:id="@+id/Relative3"
+            android:background="@color/primary"
+            >
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/caixa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/debt"
+                android:digits="0123456789."
+                android:inputType="numberDecimal">
+
+                <EditText
+                    android:id="@+id/amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:digits="0123456789."
+                    android:textColorHint="@color/textPrimary"
+                    android:hint="@string/amount"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/Relative4"
+            android:background="@color/accent"
+            >
+            <Button
+                android:id="@+id/butom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/accent"
+                android:text="Settle Up"
+                android:layout_centerHorizontal="true"
+                android:textSize="20dp"
+                android:textColor="@color/textPrimary"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

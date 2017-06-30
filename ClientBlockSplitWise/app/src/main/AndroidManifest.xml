@@ -9,13 +9,13 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name="pojo.State"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="pojo.State">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -97,10 +97,21 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddGroupDebt"
+        <activity
+            android:name=".AddGroupDebt"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SettleUp"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Group"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.blocksplitwise.clientblocksplitwise.Group" />
+        </activity>
     </application>
 
 </manifest>

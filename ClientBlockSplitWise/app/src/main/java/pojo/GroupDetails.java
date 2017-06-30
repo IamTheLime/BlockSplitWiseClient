@@ -66,6 +66,9 @@ public class GroupDetails implements Serializable {
         this.id = gd.getId();
         this.photoId = gd.getPhotoId();
         this.members = gd.getMembers();
+        this.transactions = new ArrayList<>();
+        for(Transaction t:  gd.getTransactions())
+            this.transactions.add(t);
     }
 
     public GroupDetails(String groupName, String groupInfo, ArrayList<String> members, String id, int photoId, String tstamp) {
@@ -110,7 +113,10 @@ public class GroupDetails implements Serializable {
     }
 
     public ArrayList<Transaction> getTransactions() {
-        return transactions;
+        ArrayList<Transaction> ts = new ArrayList<>();
+        for(Transaction t: transactions)
+            ts.add(t);
+        return ts;
     }
 
     public void setTransactions(ArrayList<Transaction> transactions) {
