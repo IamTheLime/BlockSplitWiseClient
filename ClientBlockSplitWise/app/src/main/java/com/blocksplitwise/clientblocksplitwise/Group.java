@@ -52,7 +52,7 @@ import pojo.Transaction;
 public class Group extends AppCompatActivity {
     private int index;
     private RecyclerView list;
-    private ArrayList<Event> items;
+    private ArrayList<Transaction> items;
     private State state;
     private int length;
     private GroupDetails groupName;
@@ -118,9 +118,10 @@ public class Group extends AppCompatActivity {
         list.setLayoutManager(llm);
         fillItems();
         list.setLayoutManager(new LinearLayoutManager(this));
+        items = state.getGroupPosition(index).getTransactions();
         orderTimestap();
         length = state.getGroupPosition(index).getTransactions().size();
-        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets(),state.getUserName()));
+        list.setAdapter(new EventsAdapter(LayoutInflater.from(this), items, new EventClickHandler(),getAssets(),state.getUserName()));
         CircularImageView iv = (CircularImageView) findViewById(R.id.group_logo);
         iv.setImageResource(R.mipmap.ic_launcher);
         iv.setElevation(60);
@@ -140,12 +141,10 @@ public class Group extends AppCompatActivity {
     }
 
     private void orderTimestap() {
-        Collections.sort(state.getGroupPosition(index).getTransactions(), new Comparator<Transaction>() {
+        Collections.sort(items, new Comparator<Transaction>() {
             @Override
             public int compare(Transaction o1, Transaction o2) {
-                if(Long.parseLong(o1.getTstamp().replaceAll("s","")) >= Long.parseLong(o2.getTstamp().replaceAll("s","")))
-                    return 1;
-                else return -1;
+                return (int) -(Long.parseLong(o1.getTstamp().replaceAll("s","")) - Long.parseLong(o2.getTstamp().replaceAll("s","")));
             }
         });
     }
@@ -430,7 +429,9 @@ public class Group extends AppCompatActivity {
                     Transaction res = new Transaction(users,values,fromUser,gname,desc,id,timestamp);
 
                     state.addTransaction(groupId,res);
-                    list.setAdapter(new EventsAdapter(LayoutInflater.from(Group.this), state.getGroupPosition(index).getTransactions(), new EventClickHandler(),getAssets()));
+                    items = state.getGroupPosition(index).getTransactions();
+                    orderTimestap();
+                    list.setAdapter(new EventsAdapter(LayoutInflater.from(Group.this), items, new EventClickHandler(),getAssets()));
 
 
                 } catch (JSONException e) {
@@ -458,7 +459,9 @@ public class Group extends AppCompatActivity {
             int index = users.indexOf(state.getUserName());
             if(index>=0)
                 sum += t.getValues().get(index);
+
         }
+        System.out.println("" + sum);
 
         return sum;
     }

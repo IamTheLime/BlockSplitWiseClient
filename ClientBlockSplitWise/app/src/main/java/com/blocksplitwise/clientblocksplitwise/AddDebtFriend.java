@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,7 +26,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import pojo.FriendDebts;
-import pojo.FriendInfo;
 
 public class AddDebtFriend extends AppCompatActivity {
     private TextView tAmount;
@@ -110,13 +108,11 @@ public class AddDebtFriend extends AppCompatActivity {
                 option = true;
             if(st.equals("Owes you"))
                 option = false;
-            Toast.makeText(AddDebtFriend.this, "Item "+option,Toast.LENGTH_SHORT).show();
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
             option = true;
-            Toast.makeText(AddDebtFriend.this, "Nothing "+option,Toast.LENGTH_SHORT).show();
         }
     }
 }

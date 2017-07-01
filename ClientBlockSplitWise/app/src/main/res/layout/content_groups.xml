@@ -59,7 +59,7 @@
              android:layout_height="wrap_content"
              android:layout_alignParentStart="true"
              android:layout_toStartOf="@id/llayoutaux"
-             android:src="@mipmap/ic_launcher_round"
+             android:src="@mipmap/ic_groups2"
              app:civ_border="true"
              app:civ_border_color="@color/primaryDark"
              app:civ_border_width="4dp"

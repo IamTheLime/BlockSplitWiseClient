@@ -591,7 +591,7 @@ public class Groups extends AppCompatActivity {
             }
         }
 
-        tv3.setText(""+sum);
+        tv3.setText(""+sum+"€");
 
         //return sum;
     }

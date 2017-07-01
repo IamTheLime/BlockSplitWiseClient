@@ -64,6 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@id/debt"
+                android:textColorHint="@color/textPrimary"
+                android:textColor="@color/textPrimary"
                 android:digits="0123456789."
                 android:inputType="numberDecimal">
 
@@ -73,6 +75,7 @@
                     android:layout_height="match_parent"
                     android:digits="0123456789."
                     android:textColorHint="@color/textPrimary"
+                    android:textColor="@color/textPrimary"
                     android:hint="@string/amount"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />

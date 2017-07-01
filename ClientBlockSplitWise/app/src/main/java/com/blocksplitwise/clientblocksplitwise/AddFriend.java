@@ -46,7 +46,7 @@ public class AddFriend extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.toolbar_title);
         Typeface face = Typeface.createFromAsset((getAssets()),"font/Amethyst.ttf");
         tv.setTypeface(face);
-        tv.setText("Add Some Debts");
+        tv.setText("Add Some Friends");
         tv.setTextSize(30);
         ////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar);

@@ -65,6 +65,11 @@ public class State extends Application implements Serializable{
         aux.addTransaction(ts);
     }
 
+    public synchronized void addTransaction(int gd, Transaction ts, boolean b) {
+        GroupDetails aux = groups.get(gd);
+        aux.addTransaction(ts);
+    }
+
     public GroupDetails getGroupPosition(int i) {
         return groups.get(i);
     }

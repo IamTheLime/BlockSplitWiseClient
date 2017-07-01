@@ -21,11 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pojo.FriendInfo;
+import pojo.State;
 
 public class AddFriendToGroup extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<FriendInfo> friends;
+    private State state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class AddFriendToGroup extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
         // This is Just for Test
         initializeData();
-        recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this),friends,new AddFriendToGroup.RecyclerOnClickHandler(),getAssets()));
+        recyclerView.setAdapter(new FriendsEventsAdapter(LayoutInflater.from(this), state.getFriends(), new AddFriendToGroup.RecyclerOnClickHandler(), getAssets()));
 
         //EXTRAS
         //initfonts();
@@ -74,11 +76,8 @@ public class AddFriendToGroup extends AppCompatActivity {
     private void initializeData() {
         //Query the server for the group information
         //Initialize the List With The group details
-        friends = new ArrayList<>();
-        friends.add(new FriendInfo("rui", R.mipmap.ic_money));
-        friends.add(new FriendInfo("tiago", R.mipmap.ic_money));
-        friends.add(new FriendInfo("bernardo", R.mipmap.ic_house));
-        friends.add(new FriendInfo("rafa", R.mipmap.ic_house));
+        state = (State) getApplicationContext();
+        friends = state.getFriends();
 
     }
 

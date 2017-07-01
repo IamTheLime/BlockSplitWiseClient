@@ -9,22 +9,39 @@
     tools:showIn="@layout/app_bar_main">
 
 <RelativeLayout
-    android:layout_width="395dp"
-    android:layout_height="513dp"
-    android:layout_centerInParent="true">
+    android:id="@+id/upperlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerInParent="true"
+    android:background="@color/primaryDark">
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/circularImageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/ic_launcher"
         android:layout_marginTop="20dp"
         app:civ_border="true"
-        app:civ_border_color="#3f51b5"
+        app:civ_border_color="@color/accent"
         app:civ_border_width="20dp"
         app:civ_shadow="true"
-        app:civ_shadow_color="#3f51b5"
+        app:civ_shadow_color="@color/primaryDark"
         app:civ_shadow_radius="10" />
 </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@id/upperlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/accent">
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textPrimary"
+            android:textSize="50dp"
+            android:gravity="center"
+            android:text="Welcome to BlockSpliWise"/>
+    </RelativeLayout>
 </RelativeLayout>

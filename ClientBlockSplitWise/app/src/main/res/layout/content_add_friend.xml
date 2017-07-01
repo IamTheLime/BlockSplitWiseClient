@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,7 +23,7 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/prompt_email"
+                android:hint="User name"
                 android:inputType="textEmailAddress"
                 android:maxLines="1" />
 
@@ -32,7 +32,8 @@
         <Button
             android:stateListAnimator="@null"
             android:id="@+id/addFrienButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
             android:layout_height="wrap_content"
             android:background="@color/primary"
             android:elevation="20dp"
@@ -40,8 +41,8 @@
             android:bottomLeftRadius="10dp"
             android:topLeftRadius="10dp"
             android:topRightRadius="10dp"
-            android:layout_below="@id/caixa"
-            android:text="ADD" />
+            android:text="ADD"
+            android:textColor="@color/textPrimary"/>
     </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

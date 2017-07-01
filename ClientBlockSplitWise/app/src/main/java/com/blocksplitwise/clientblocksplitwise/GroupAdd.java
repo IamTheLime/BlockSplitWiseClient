@@ -210,7 +210,6 @@ public class GroupAdd extends AppCompatActivity {
         public void onClick(final View view) {
             int itemPosition = recyclerView.getChildLayoutPosition(view);
             FriendDetailsGroupAdd item = friends.get(itemPosition);
-            Toast.makeText(GroupAdd.this, "TEHE", Toast.LENGTH_SHORT).show();
             //Intent goToGroupDetails = new Intent(Groups.this, Group.class);
             //goToGroupDetails.putExtra("GroupValue", item);
             //startActivityForResult(goToGroupDetails, 0);

@@ -21,26 +21,16 @@
                 android:id="@+id/userPicFriends"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginStart="10dp"
-                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_costanza"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_menu_friends"
                 app:civ_border="true"
-                app:civ_border_color="@color/primaryDark"
+                app:civ_border_color="@color/textPrimary"
                 app:civ_border_width="4dp"
                 app:civ_shadow="true"
                 app:civ_shadow_color="@color/primaryDark"
                 app:civ_shadow_radius="10"
             />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/userPicFriends"
-                android:text="THIS IS PLACEHOLDER TEXT"
-                android:textColor="@color/colorBG"
-                />
 
     </RelativeLayout>
     <RelativeLayout

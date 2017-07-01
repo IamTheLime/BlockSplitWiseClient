@@ -31,7 +31,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.OutputStream;
 import java.math.RoundingMode;
@@ -160,10 +159,16 @@ public class AddGroupDebt extends AppCompatActivity {
                         editText.clearFocus();
                         InputMethodManager imm =  (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(recyclerView.getWindowToken(), 0);
-                        Toast.makeText(AddGroupDebt.this, "" + total, Toast.LENGTH_SHORT).show();
                     }
-                    else
-                        Toast.makeText(AddGroupDebt.this, "Input must be a decimal number", Toast.LENGTH_SHORT).show();
+                    else {
+                        final Snackbar snackbar = Snackbar.make(recyclerView, "Input must be a decimal number", Snackbar.LENGTH_LONG);
+                        snackbar.setAction("Close", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        }).show();
+                    }
                     return true;
                 }
                 return false;
@@ -197,7 +202,6 @@ public class AddGroupDebt extends AppCompatActivity {
                         editText.clearFocus();
                         InputMethodManager imm =  (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(recyclerView.getWindowToken(), 0);
-                        Toast.makeText(AddGroupDebt.this, "Total " + total, Toast.LENGTH_SHORT).show();
                     }
                     else {
                         Snackbar.make(recyclerView, "Sum of all percentages must add to 100", Snackbar.LENGTH_LONG)
@@ -272,7 +276,6 @@ public class AddGroupDebt extends AppCompatActivity {
         editText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Code here executes on main thread after user presses button
-                Toast.makeText(getApplicationContext(), "KJSADHGJKASDHUIGASHIU", Toast.LENGTH_SHORT).show();
                 if(editText.getSelectionEnd() >= editText.getText().length() - 1)
                     editText.setSelection(editText.getText().length()-1);
             }
@@ -355,14 +358,12 @@ public class AddGroupDebt extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             // An item was selected. You can retrieve the selected item using
             //String st = (String) parent.getItemAtPosition(pos);
-            Toast.makeText(AddGroupDebt.this, "Item " + pos,Toast.LENGTH_SHORT).show();
             setDivision(pos);
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
-            /*option = true;
-            Toast.makeText(AddGroupDebt.this, "Nothing "+option,Toast.LENGTH_SHORT).show();*/
+            /*option = true;*/
         }
     }
 
@@ -392,7 +393,6 @@ public class AddGroupDebt extends AppCompatActivity {
                                 editText.clearFocus();
                                 InputMethodManager imm =  (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(recyclerView.getWindowToken(), 0);
-                                Toast.makeText(AddGroupDebt.this, "" + total, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

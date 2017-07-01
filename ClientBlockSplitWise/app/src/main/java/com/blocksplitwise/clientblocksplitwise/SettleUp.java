@@ -89,6 +89,7 @@ public class SettleUp extends AppCompatActivity {
 
     private void init() {
         Bundle bundle = getIntent().getExtras();
+        debt.setText(bundle.getString("debt")+"€");
         group = (GroupDetails) bundle.get("group");
         index = bundle.getInt("index");
         state = (State) getApplicationContext();

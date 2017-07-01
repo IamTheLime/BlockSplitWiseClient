@@ -77,7 +77,21 @@ class GroupsPreviewAdapter extends RecyclerView.Adapter<GroupsPreviewAdapter.Gro
         public void onBindViewHolder(GroupViewHolder groupViewHolder, int i) {
             groupViewHolder.groupName.setText(groups.get(i).getGroupName());
             groupViewHolder.groupInfo.setText(groups.get(i).getGroupInfo());
-            groupViewHolder.groupPhoto.setImageResource(groups.get(i).getPhotoId());
+            //if(groups.get(i).getGroupInfo().equals(""))
+            switch(groups.get(i).getGroupInfo()) {
+                case "Apartment":
+                    groupViewHolder.groupPhoto.setImageResource(R.mipmap.ic_apartment);
+                    break;
+                case "House":
+                    groupViewHolder.groupPhoto.setImageResource(R.mipmap.ic_house2);
+                    break;
+                case "Trip":
+                    groupViewHolder.groupPhoto.setImageResource(R.mipmap.ic_trip);
+                    break;
+                case "Other":
+                    groupViewHolder.groupPhoto.setImageResource(R.mipmap.ic_other);
+                    break;
+            }
         }
 
         @Override

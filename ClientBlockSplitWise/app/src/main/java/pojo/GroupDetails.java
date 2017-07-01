@@ -123,9 +123,11 @@ public class GroupDetails implements Serializable {
         this.transactions = transactions;
     }
 
-    public void addTransaction(Transaction ts, int x) {this.transactions.add(x,ts);}
+    public void addTransaction(Transaction ts, int x) { this.transactions.add(x,ts);}
 
-    public void addTransaction(Transaction ts) {this.transactions.add(ts);}
+    public void addTransaction(Transaction ts) {
+        this.transactions.add(ts);
+    }
 
     public String getId() {
         return id;
